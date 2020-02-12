@@ -1,5 +1,5 @@
-<template>
-  <h1>guest-list</h1>
+<template lang="pug">
+  div hello
 </template>
 
 <script>
