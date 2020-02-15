@@ -14,6 +14,8 @@ section
         li(v-if='event.charge') Charge: {{ event.charge }}
         li(v-if='hostText') Hosts: {{ hostText }}
         li(v-if='event.description') {{ event.description }}
+      a(@click='$router.push({name:"eventId-enter"})')
+        | Enter page
 </template>
 
 <script>
@@ -98,6 +100,6 @@ export default {
   }
 }
 .information {
-  margin-top: 10px;
+  margin: 10px 0;
 }
 </style>

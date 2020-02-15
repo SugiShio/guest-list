@@ -3,7 +3,10 @@
     line-height: initial;
   }
 }
-
-.el-input {
+.el-checkbox {
+  line-height: 40px;
+}
+.el-input,
+.el-select {
   width: 100% !important;
 }
