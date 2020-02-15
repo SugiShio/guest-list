@@ -43,6 +43,7 @@ section
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
+import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const GUEST_TYPES = ['Player', 'Listener']
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
@@ -88,14 +89,14 @@ export default {
   },
   methods: {
     create() {
-      const guest = {
+      const guest = new Guest({
         name: this.name,
-        instruments: this.instruments,
+        type: this.type,
+        instruments: this.instrumentsOrdered,
         instrumentMain: this.instrumentMain,
         instrumentOther: this.instrumentOther,
         createdAt: new Date().getTime()
-      }
-      console.log(guest)
+      })
       return firestore
         .collection('users')
         .doc(this.$store.state.uid)
@@ -103,7 +104,7 @@ export default {
         .doc(this.$route.params.eventId)
         .collection('guests')
         .doc()
-        .set(guest)
+        .set(guest.toObject())
         .then((responce) => {
           this.$router.push({ name: 'events' })
         })
