@@ -1,7 +1,11 @@
 <template lang="pug">
 section.head
-  h2.head__subTitle(v-if='subTitle') {{ subTitle }}
-  h1.head__title(v-if='title') {{ title }}
+  h2(v-if='subTitle') {{ subTitle }}
+  .head__container
+    h1.head__title(v-if='title') {{ title }}
+    div
+      slot(name='functions')
+  slot(name='content')
 </template>
 
 <script>

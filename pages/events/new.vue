@@ -125,7 +125,6 @@ export default {
         date: this.date,
         createdAt: new Date().getTime()
       })
-      console.log(event)
       return firestore
         .collection('users')
         .doc(this.$store.state.uid)
@@ -138,8 +137,6 @@ export default {
         .catch((error) => {
           throw error
         })
-      /**
-       */
     },
     setIsWide() {
       this.isWide = window.innerWidth > 600
