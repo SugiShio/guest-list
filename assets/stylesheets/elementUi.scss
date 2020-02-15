@@ -1,0 +1,9 @@
+.el-form-item__label {
+  @include screensize-sm {
+    line-height: initial;
+  }
+}
+
+.el-input {
+  width: 100% !important;
+}

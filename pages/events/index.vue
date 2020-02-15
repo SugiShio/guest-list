@@ -1,6 +1,10 @@
 <template lang="pug">
 section
   section-head(title='Events')
+    template(#functions)
+      a(@click='$router.push({name:"events-new"})')
+        i.el-icon-plus
+        | New Event
   list
     list-item(
       v-for='event in events'
@@ -47,6 +51,7 @@ export default {
         .collection('users')
         .doc(this.$store.state.uid)
         .collection('events')
+        .orderBy('createdAt', 'desc')
         .get()
         .then((querySnapShot) => {
           querySnapShot.forEach((doc) => {

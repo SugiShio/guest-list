@@ -16,6 +16,11 @@ export default {
 <style lang="scss" scoped>
 .head {
   padding: 15px 20px;
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &__title {
     font-size: 30px;
     font-weight: bold;
