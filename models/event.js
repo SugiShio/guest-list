@@ -1,13 +1,14 @@
 import moment from 'moment'
 export class Event {
-  constructor(params) {
+  constructor(params = {}) {
     this.name = params.name || 'Event'
     this.charge = params.charge
+    this.text = params.text
     this.createdAt = params.createdAt || new Date().getTime()
     this.openAt = getTimestamp({ date: params.date, time: params.openAt })
     this.startAt = getTimestamp({ date: params.date, time: params.startAt })
-    this.hosts = params.hosts.filter((host) => host)
-    this.hostsInstruments = params.hostsInstruments.filter(
+    this.hosts = (params.hosts || []).filter((host) => host)
+    this.hostsInstruments = (params.hostsInstruments || []).filter(
       (_, index) => params.hosts[index]
     )
     if (params.id) this.id = params.id

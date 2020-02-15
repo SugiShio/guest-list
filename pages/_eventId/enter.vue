@@ -1,7 +1,8 @@
 <template lang="pug">
 section
-  section-head(title='New Guest')
+  section-head-event
   section-content
+    .text(v-if='event.text') {{ event.text }}
     el-form
       el-form-item
         el-input(
@@ -41,16 +42,17 @@ section
 
 <script>
 import sectionContent from '@/components/sectionContent'
-import sectionHead from '@/components/sectionHead'
+import sectionHeadEvent from '@/components/sectionHeadEvent'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const GUEST_TYPES = ['Player', 'Listener']
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
 export default {
-  components: { sectionContent, sectionHead },
+  components: { sectionContent, sectionHeadEvent },
   data() {
     return {
+      event: new Event(),
       name: '',
       instruments: [],
       instrumentMain: '',
@@ -97,7 +99,7 @@ export default {
         instrumentOther: this.instrumentOther,
         createdAt: new Date().getTime()
       })
-      return firestore
+      firestore
         .collection('users')
         .doc(this.$store.state.uid)
         .collection('events')
@@ -119,4 +121,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.text {
+  margin-bottom: 20px;
+}
+</style>

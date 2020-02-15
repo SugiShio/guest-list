@@ -1,82 +1,40 @@
 <template lang="pug">
 section
-  section-head(
-    :title='event.name'
-    :sub-title='event.dateText')
-    h1.event__name {{ event.name }}
-    template(#functions)
-      i.icon.el-icon-arrow-down(
-        :class='{isOpen: showInfo}'
-        @click='showInfo = !showInfo')
-    template(#content)
-      ul.information(v-show='showInfo')
-        li(v-if='timeText') {{ timeText }}
-        li(v-if='event.charge') Charge: {{ event.charge }}
-        li(v-if='hostText') Hosts: {{ hostText }}
-        li(v-if='event.description') {{ event.description }}
-      a(@click='$router.push({name:"eventId-enter"})')
-        | Enter page
+  section-head-event
+    a(@click='$router.push({name:"eventId-enter"})')
+      | Enter page
 </template>
 
 <script>
-import sectionHead from '@/components/sectionHead'
-import { Event } from '@/models/event'
+import sectionHeadEvent from '@/components/sectionHeadEvent'
 import { firestore } from '~/plugins/firebase.js'
 export default {
-  components: { sectionHead },
+  components: { sectionHeadEvent },
   data() {
     return {
-      event: {},
-      guests: [],
-      showInfo: false
+      guests: []
     }
   },
   computed: {
-    hostText() {
-      return (this.event.hostTexts || []).join(', ')
-    },
-    timeText() {
-      const openAt = this.event.openAt ? `Open ${this.event.openAtText}` : null
-      const startAt = this.event.startAt
-        ? `Start ${this.event.startAtText}`
-        : null
-      return [openAt, startAt].filter((v) => v).join(' / ')
-    },
     uid() {
       return this.$store.state.uid
     }
   },
   watch: {
     uid(uid) {
-      if (uid) this.init()
+      if (uid) this.fetchGuests()
     }
   },
   mounted() {
-    if (this.uid) this.init()
+    if (this.uid) this.fetchGuests()
   },
   methods: {
-    init() {
-      this.eventDoc = firestore
+    fetchGuests() {
+      firestore
         .collection('users')
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
-
-      this.fetchEvent()
-      this.fetchGuests()
-    },
-    fetchEvent() {
-      this.eventDoc
-        .get()
-        .then((doc) => {
-          this.event = new Event(doc.data())
-        })
-        .catch((error) => {
-          throw error
-        })
-    },
-    fetchGuests() {
-      this.eventDoc
         .collection('guests')
         .get()
         .then((querySnapShot) => {
