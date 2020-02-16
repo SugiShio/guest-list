@@ -108,7 +108,11 @@ export default {
         .doc()
         .set(guest.toObject())
         .then((responce) => {
-          this.$router.push({ name: 'events' })
+          this.name = ''
+          this.instruments = []
+          this.instrumentMain = ''
+          this.instrumentOther = ''
+          this.type = GUEST_TYPES[0]
         })
         .catch((error) => {
           throw error

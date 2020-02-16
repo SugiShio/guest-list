@@ -16,6 +16,13 @@ export class Guest {
   get isPlayer() {
     return this.type === 'Player'
   }
+  get guestText() {
+    const instrument =
+      this.instrumentMain === 'Other'
+        ? this.instrumentOther
+        : this.instrumentMain
+    return `${this.name} (${instrument})`
+  }
   toObject() {
     const object = {}
     Object.keys(this).forEach((key) => {

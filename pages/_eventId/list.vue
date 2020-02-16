@@ -11,30 +11,66 @@ section
           li.guest(
             v-for='guest in block.guests'
             :class='{isSub: guest.isSub, isSelected: guest.isSelected}'
-            @click='updateGuestsSelected(guest)')
+            @click='updateGuestsSelected(guest.item)')
             div
-              |{{ guest.name }}
-              span(v-if='block.instrument === "Other"')
-                |({{ guest.instrumentOther }})
-            div(v-if='guest.count') {{ guest.count }}
+              template(v-if='block.instrument === "Other"') {{ guest.item.guestText }}
+              template(v-else) {{ guest.item.name }}
+            div(v-if='guest.item.count') {{ guest.item.count }}
   .buttonNewSession(
     v-if='guestsSelected.length'
-    @click='openModalNewSession')
+    @click='showModalNewSession = true')
     |Create a new session
+  modal(
+    v-if='showModalNewSession'
+    @cancel='showModalNewSession = false')
+    section-head(title='New session')
+      template(#functions)
+        g-button(
+          @click='showModalNewSession = false'
+          type='weak'
+          inline) Close
+    section-content
+      el-form(label-position='top')
+        el-form-item(label='Members')
+          ul
+            li(v-for='guest in guestsSelected') {{ guest.guestText }}
+        el-form-item(label='What song will you play?')
+          el-input(v-model='song')
+        section-button
+          g-button(
+            @click='showModalNewSession = false'
+            type='weak') Cancel
+          g-button(
+            @click='createSession'
+            type='primary') Start!
+
 </template>
 
 <script>
+import gButton from '@/components/button'
+import modal from '@/components/modal'
+import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
+import sectionHead from '@/components/sectionHead'
 import sectionHeadEvent from '@/components/sectionHeadEvent'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
 export default {
-  components: { sectionContent, sectionHeadEvent },
+  components: {
+    gButton,
+    modal,
+    sectionButton,
+    sectionContent,
+    sectionHead,
+    sectionHeadEvent
+  },
   data() {
     return {
       guests: [],
-      guestsSelected: []
+      guestsSelected: [],
+      showModalNewSession: false,
+      song: ''
     }
   },
   computed: {
@@ -43,10 +79,14 @@ export default {
         const guests = this.guests
           .filter((guest) => guest.instruments.includes(instrument))
           .map((guest) => {
+            const isSelected = !!this.guestsSelected.find(
+              (guestSelected) => guestSelected.id === guest.id
+            )
+            const isSub = guest.instrumentMain !== instrument
             return {
-              ...guest,
-              isSub: guest.instrumentMain !== instrument,
-              isSelected: this.guestsSelected.includes(guest.id)
+              item: guest,
+              isSub,
+              isSelected
             }
           })
         return { instrument, guests }
@@ -58,19 +98,23 @@ export default {
   },
   watch: {
     uid(uid) {
-      if (uid) this.fetchGuests()
+      if (uid) this.init()
     }
   },
   mounted() {
-    if (this.uid) this.fetchGuests()
+    if (this.uid) this.init()
   },
   methods: {
-    fetchGuests() {
-      firestore
+    init() {
+      this.eventDoc = firestore
         .collection('users')
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
+      this.fetchGuests()
+    },
+    fetchGuests() {
+      this.eventDoc
         .collection('guests')
         .get()
         .then((querySnapShot) => {
@@ -82,14 +126,46 @@ export default {
           throw error
         })
     },
-    openModalNewSession() {},
     updateGuestsSelected(guest) {
-      if (this.guestsSelected.includes(guest.id)) {
-        const index = this.guestsSelected.findIndex((g) => g === guest.id)
-        this.guestsSelected.splice(index, 1)
+      const index = this.guestsSelected.findIndex(
+        (guestSelected) => guestSelected.id === guest.id
+      )
+      if (index < 0) {
+        this.guestsSelected.push(guest)
       } else {
-        this.guestsSelected.push(guest.id)
+        this.guestsSelected.splice(index, 1)
       }
+    },
+    createSession() {
+      const history = {
+        song: this.song,
+        guests: this.guestsSelected.map((guest) => guest.name),
+        createdAt: new Date().getTime()
+      }
+      this.guestsSelected.forEach((guest) => {
+        this.eventDoc
+          .collection('guests')
+          .doc(guest.id)
+          .update({ count: guest.count + 1 })
+          .then((responce) => {})
+          .catch((error) => {
+            throw error
+          })
+      })
+      this.eventDoc
+        .collection('history')
+        .doc()
+        .set(history)
+        .then((responce) => {
+          this.showModalNewSession = false
+          this.guestsSelected = []
+          this.song = ''
+          this.guests = []
+          this.fetchGuests()
+        })
+        .catch((error) => {
+          throw error
+        })
     }
   }
 }
@@ -104,13 +180,16 @@ export default {
     padding: 5px;
   }
   &__title {
-    color: #e50012;
+    text-align: center;
+    border-bottom: 2px solid #e50012;
+    padding: 5px;
     margin: 10px 0;
   }
 }
 .guest {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-radius: 3px;
   cursor: pointer;
   padding: 5px 10px;
