@@ -110,7 +110,7 @@ export default {
         .doc(this.$route.params.eventId)
         .collection('guests')
         .doc()
-        .set(guest.toObject())
+        .set({ ...guest })
         .then((responce) => {
           this.name = ''
           this.instruments = []

@@ -31,13 +31,6 @@ export class Event {
       (host, index) => `${host} (${this.hostsInstruments[index]})`
     )
   }
-  toObject() {
-    const object = {}
-    Object.keys(this).forEach((key) => {
-      object[key] = this[key]
-    })
-    return object
-  }
 }
 
 const getTimestamp = ({ date, time }) => {

@@ -23,11 +23,4 @@ export class Guest {
         : this.instrumentMain
     return `${this.name} (${instrument})`
   }
-  toObject() {
-    const object = {}
-    Object.keys(this).forEach((key) => {
-      object[key] = this[key]
-    })
-    return object
-  }
 }

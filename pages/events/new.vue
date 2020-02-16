@@ -144,7 +144,7 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc()
-        .set(event.toObject())
+        .set({ ...event })
         .then((responce) => {
           this.$router.push({ name: 'events' })
         })
