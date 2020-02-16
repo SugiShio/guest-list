@@ -42,7 +42,11 @@ section
             i.el-icon-circle-close(@click='removeHost(index)')
         el-row
           el-col(:span='24')
-            el-button(size='small' @click='addHost')
+            g-button(
+              @click='addHost'
+              size='mini'
+              type='weak'
+              inline)
               i.el-icon-plus
               |Add host
       el-form-item(label="Welcome text")
@@ -53,18 +57,25 @@ section
         el-input(
           v-model='description'
           type='textarea')
-      el-form-item()
-        el-button(@click='create') Submit
+      section-button
+        g-button(
+          @click='back'
+          type='weak') Cancel
+        g-button(
+          @click='create'
+          type='primary') Submit
 
 </template>
 
 <script>
+import gButton from '@/components/button'
+import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 export default {
-  components: { sectionContent, sectionHead },
+  components: { gButton, sectionButton, sectionContent, sectionHead },
   data() {
     const openAt = new Date()
     openAt.setHours(openAt.getHours() + 1)
@@ -111,6 +122,9 @@ export default {
     addHost() {
       this.hosts.push('')
       this.hostsInstruments.push('')
+    },
+    back() {
+      history.back()
     },
     create() {
       const event = new Event({

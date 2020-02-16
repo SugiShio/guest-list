@@ -1,8 +1,11 @@
 <template lang="pug">
 section
   section-head-event
-    a(@click='$router.push({name:"eventId-enter"})')
-      | Enter page
+    g-button(
+      @click='$router.push({name:"eventId-enter"})'
+      size='mini'
+      type='weak'
+      inline) Enter page
   section-content
     ul.table
       li.table__item(v-for='block in guestsCategorised')

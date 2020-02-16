@@ -2,9 +2,11 @@
 section
   section-head(title='Events')
     template(#functions)
-      a(@click='$router.push({name:"events-new"})')
-        i.el-icon-plus
-        | New Event
+      g-button(
+        @click='$router.push({name:"events-new"})'
+        type='weak')
+          i.el-icon-plus
+          | &nbsp;New Event
   list
     list-item(
       v-for='event in events'
@@ -18,13 +20,14 @@ section
 </template>
 
 <script>
+import gButton from '@/components/button'
 import list from '@/components/list'
 import listItem from '@/components/listItem'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 export default {
-  components: { list, listItem, sectionHead },
+  components: { gButton, list, listItem, sectionHead },
   data() {
     return {
       events: []

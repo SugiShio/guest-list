@@ -35,12 +35,16 @@ section
               :label='instrument'
               :key='instrument'
               :value='instrument')
-      el-form-item
-        el-button(@click='create') Submit
+      sectionButton
+        g-button(
+          @click='create'
+          type='primary') Submit
 
 </template>
 
 <script>
+import gButton from '@/components/button'
+import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHeadEvent from '@/components/sectionHeadEvent'
 import { Event } from '@/models/event'
@@ -49,7 +53,7 @@ import { firestore } from '~/plugins/firebase.js'
 const GUEST_TYPES = ['Player', 'Listener']
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
 export default {
-  components: { sectionContent, sectionHeadEvent },
+  components: { gButton, sectionButton, sectionContent, sectionHeadEvent },
   data() {
     return {
       event: new Event(),
