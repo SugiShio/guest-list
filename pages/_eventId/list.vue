@@ -199,18 +199,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../assets/stylesheets/utils';
 .table {
-  display: flex;
   margin: -5px -5px 50px;
+  @include screensize-lg {
+    display: flex;
+  }
   &__item {
     width: 100%;
     padding: 5px;
   }
   &__title {
-    text-align: center;
     border-bottom: 2px solid #e50012;
     padding: 5px;
     margin: 10px 0;
+    @include screensize-lg {
+      text-align: center;
+    }
   }
 }
 .guest {

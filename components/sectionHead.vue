@@ -18,12 +18,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/stylesheets/utils';
 .head {
   padding: 15px 20px;
   &__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include screensize-lg {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
   &__title {
     font-size: 30px;

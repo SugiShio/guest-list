@@ -4,7 +4,8 @@ section
     template(#functions)
       g-button(
         @click='$router.push({name:"events-new"})'
-        type='weak')
+        size='mini'
+        inline)
           i.el-icon-plus
           | &nbsp;New Event
   list(v-if='events.length')

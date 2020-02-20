@@ -1,6 +1,6 @@
 <template lang="pug">
 a.button(
-  :class='[size, type, { block: !inline}]'
+  :class='[size, type, style]'
   @click='$emit("click")')
   slot
 </template>
@@ -11,6 +11,11 @@ export default {
     size: { type: String, default: '' },
     type: { type: String, default: '' },
     inline: { type: Boolean, default: false }
+  },
+  computed: {
+    style() {
+      return this.inline ? 'inline' : 'block'
+    }
   }
 }
 </script>
@@ -27,6 +32,9 @@ export default {
   &.block {
     display: block;
     min-width: 140px;
+  }
+  &.inline + &.inline {
+    margin-left: 5px;
   }
   &:hover {
     background-color: #ddd;
