@@ -4,7 +4,7 @@ export class Event {
     this.name = params.name || 'Event'
     this.charge = params.charge
     this.text = params.text
-    this.createdAt = params.createdAt || new Date().getTime()
+    this.createdAt = params.createdAt
     this.openAt = getTimestamp({ date: params.date, time: params.openAt })
     this.startAt = getTimestamp({ date: params.date, time: params.startAt })
     this.hosts = (params.hosts || []).filter((host) => host)
@@ -12,6 +12,7 @@ export class Event {
       (_, index) => params.hosts[index]
     )
     if (params.id) this.id = params.id
+    if (params.updatedAt) this.updatedAt = params.updatedAt
   }
 
   get dateMeta() {
@@ -35,8 +36,8 @@ export class Event {
 
 const getTimestamp = ({ date, time }) => {
   if (!time) return null
-  if (typeof time === 'number') return time
-  date = date || time
+  date = new Date(date || time)
+  time = new Date(time)
   const year = date.getFullYear()
   const month = date.getMonth()
   const date_ = date.getDate()

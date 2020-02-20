@@ -2,6 +2,11 @@
 section
   section-head-event
     g-button(
+      @click='$router.push({name:"events-eventId"})'
+      size='mini'
+      type='weak'
+      inline) Event page
+    g-button(
       @click='$router.push({name:"eventId-enter"})'
       size='mini'
       type='weak'
