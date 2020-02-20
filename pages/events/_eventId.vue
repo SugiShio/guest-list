@@ -8,24 +8,25 @@ section
         #functions)
         a.buttonEdit(@click='isEdit = true')
           i.el-icon-edit
-
-    form-event(
-      :is-edit='isEdit'
-      :event='event'
-      @cancel='isEdit = false'
-      @submit='update')
+    section-content
+      form-event(
+        :is-edit='isEdit'
+        :event='event'
+        @cancel='isEdit = false'
+        @submit='update')
   div(v-else) loading
 
 </template>
 
 <script>
 import formEvent from '@/components/formEvent'
+import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 
 export default {
-  components: { formEvent, sectionHead },
+  components: { formEvent, sectionContent, sectionHead },
   data() {
     return {
       event: null,

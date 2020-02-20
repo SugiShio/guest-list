@@ -2,8 +2,8 @@ import moment from 'moment'
 export class Event {
   constructor(params = {}) {
     this.name = params.name || 'Event'
-    this.charge = params.charge
-    this.text = params.text
+    this.charge = params.charge || ''
+    this.text = params.text || ''
     this.createdAt = params.createdAt
     this.openAt = getTimestamp({ date: params.date, time: params.openAt })
     this.startAt = getTimestamp({ date: params.date, time: params.startAt })

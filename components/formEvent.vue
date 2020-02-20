@@ -1,83 +1,81 @@
 <template lang="pug">
-section
-  section-content
-    el-form(
-      :label-position='labelPosition'
-      label-width='120px')
-      el-form-item(
-        v-if='isEdit'
-        label="Event's Name")
-        el-input(v-model='eventCopied.name')
-      el-form-item(label='Date')
-        .showItem(v-if='!isEdit')
-          div {{ event.dateText }}
-          div {{ timeText }}
-        el-row(v-else)
-          el-col(:span='sizeDate')
-            el-date-picker(
-              v-model='eventCopied.date'
-              type='date'
-              format='yyyy/M/d'
-            )
-          el-col(:span='sizeTime')
-            el-time-picker(
-              v-model='eventCopied.openAt'
-              placeholder='Open at'
-              :picker-options='{format: "HH:mm"}')
-          el-col(:span='sizeTime')
-            el-time-picker(
-              v-model='eventCopied.startAt'
-              placeholder='Start at'
-              :picker-options='{format: "HH:mm"}')
-      el-form-item(label="Charge")
-        .showItem(v-if='!isEdit') {{ event.charge }}
-        el-input(
-          v-else
-          v-model='eventCopied.charge')
-      el-form-item(label="Hosts")
-        ul.showItem(v-if='!isEdit && hostTexts')
-          li(v-for='host in hostTexts') {{ host }}
-        template(v-else)
-          div.arrayForm(v-for='(host, index) in event.hosts')
-            el-row.arrayForm__main
-              el-col(:span='16')
-                el-input(
-                  v-model='eventCopied.hosts[index]'
-                  placeholder='Name')
-              el-col(:span='8')
-                el-input(
-                  v-model='eventCopied.hostsInstruments[index]'
-                  placeholder='Instrument')
-            .arrayForm__button(v-if='event.hosts.length>1')
-              i.el-icon-circle-close(@click='removeHost(index)')
-          el-row
-            el-col(:span='24')
-              g-button(
-                @click='addHost'
-                size='mini'
-                type='weak'
-                inline)
-                i.el-icon-plus
-                |Add host
-      el-form-item(label="Welcome text")
-        .showItem(v-if='!isEdit') {{ event.text }}
-        el-input(
-          v-else
-          v-model='eventCopied.text'
-          type='textarea')
-      el-form-item(label="Description")
-        .showItem(v-if='!isEdit') {{ event.description }}
-        el-input(
-          v-else
-          v-model='eventCopied.description'
-          type='textarea')
-      section-button(v-if='isEdit')
-        g-button(
-          @click='$emit("cancel")'
-          type='weak') Cancel
-        g-button(
-          @click='emit'
-          type='primary') Submit
+el-form(
+  :label-position='labelPosition'
+  label-width='120px')
+  el-form-item(
+    v-if='isEdit'
+    label="Event's Name")
+    el-input(v-model='eventCopied.name')
+  el-form-item(label='Date')
+    .showItem(v-if='!isEdit')
+      div {{ event.dateText }}
+      div {{ timeText }}
+    el-row(v-else)
+      el-col(:span='sizeDate')
+        el-date-picker(
+          v-model='eventCopied.date'
+          type='date'
+          format='yyyy/M/d'
+        )
+      el-col(:span='sizeTime')
+        el-time-picker(
+          v-model='eventCopied.openAt'
+          placeholder='Open at'
+          :picker-options='{format: "HH:mm"}')
+      el-col(:span='sizeTime')
+        el-time-picker(
+          v-model='eventCopied.startAt'
+          placeholder='Start at'
+          :picker-options='{format: "HH:mm"}')
+  el-form-item(label="Charge")
+    .showItem(v-if='!isEdit') {{ event.charge }}
+    el-input(
+      v-else
+      v-model='eventCopied.charge')
+  el-form-item(label="Hosts")
+    ul.showItem(v-if='!isEdit && hostTexts')
+      li(v-for='host in hostTexts') {{ host }}
+    template(v-else)
+      div.arrayForm(v-for='(host, index) in event.hosts')
+        el-row.arrayForm__main
+          el-col(:span='16')
+            el-input(
+              v-model='eventCopied.hosts[index]'
+              placeholder='Name')
+          el-col(:span='8')
+            el-input(
+              v-model='eventCopied.hostsInstruments[index]'
+              placeholder='Instrument')
+        .arrayForm__button(v-if='event.hosts.length>1')
+          i.el-icon-circle-close(@click='removeHost(index)')
+      el-row
+        el-col(:span='24')
+          g-button(
+            @click='addHost'
+            size='mini'
+            type='weak'
+            inline)
+            i.el-icon-plus
+            |Add host
+  el-form-item(label="Welcome text")
+    .showItem(v-if='!isEdit') {{ event.text }}
+    el-input(
+      v-else
+      v-model='eventCopied.text'
+      type='textarea')
+  el-form-item(label="Description")
+    .showItem(v-if='!isEdit') {{ event.description }}
+    el-input(
+      v-else
+      v-model='eventCopied.description'
+      type='textarea')
+  section-button(v-if='isEdit')
+    g-button(
+      @click='$emit("cancel")'
+      type='weak') Cancel
+    g-button(
+      @click='emit'
+      type='primary') Submit
 
 </template>
 
@@ -87,7 +85,6 @@ import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
-// import { firestore } from '~/plugins/firebase.js'
 export default {
   components: { gButton, sectionButton, sectionContent, sectionHead },
   props: {
@@ -124,9 +121,13 @@ export default {
       return [open, start].join(' / ')
     }
   },
+  watch: {
+    isEdit(value) {
+      if (value) this.eventCopied = { ...this.event, date: this.event.startAt }
+    }
+  },
   mounted() {
     this.setIsWide()
-    this.eventCopied = { ...this.event, date: this.event.startAt }
     window.addEventListener('resize', () => {
       clearTimeout(this.resizeTimer)
       this.resizeTimer = setTimeout(() => {
