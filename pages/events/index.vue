@@ -18,17 +18,19 @@ section
             :datetime='event.dateMeta')
             |{{ event.dateText }}
           .eventItem__child.eventItem__child--main {{ event.name }}
+  loading(v-else)
 </template>
 
 <script>
 import gButton from '@/components/button'
 import list from '@/components/list'
 import listItem from '@/components/listItem'
+import loading from '@/components/loading'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 export default {
-  components: { gButton, list, listItem, sectionHead },
+  components: { gButton, list, listItem, loading, sectionHead },
   data() {
     return {
       events: []

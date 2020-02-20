@@ -1,53 +1,56 @@
 <template lang="pug">
 section
-  section-head(
-    :title='event.name'
-    :sub-title='event.dateText')
-    template(
-      #content
-      v-if='event.text') {{ event.text }}
-  section-content
-    el-form
-      el-form-item
-        el-input(
-          v-model='name'
-          placeholder='Name')
-      el-form-item
-        el-radio-group(v-model='type')
-          el-radio(
-            v-for='type in guestTypes'
-            :label='type'
-            :key='type')
-      template(v-if='type === "Player"')
+  template(v-if='event')
+    section-head(
+      :title='event.name'
+      :sub-title='event.dateText')
+      template(
+        #content
+        v-if='event.text') {{ event.text }}
+    section-content
+      el-form
         el-form-item
-          el-checkbox-group(
-            v-model='instruments')
-            el-checkbox(
-              v-for='instrument in instrumentsCanditate'
-              :label='instrument'
-              :key='instrument')
-        el-form-item(v-if='instruments.includes("Other")')
           el-input(
-            v-model='instrumentOther'
-            placeholder='Input instrument(s)')
-        el-form-item(v-if='instruments.length > 1')
-          el-select(
-            v-model='instrumentMain'
-            placeholder='Select your main instrument')
-            el-option(
-              v-for='instrument in instrumentsOrdered'
-              :label='instrument'
-              :key='instrument'
-              :value='instrument')
-      sectionButton
-        g-button(
-          @click='create'
-          type='primary') Submit
+            v-model='name'
+            placeholder='Name')
+        el-form-item
+          el-radio-group(v-model='type')
+            el-radio(
+              v-for='type in guestTypes'
+              :label='type'
+              :key='type')
+        template(v-if='type === "Player"')
+          el-form-item
+            el-checkbox-group(
+              v-model='instruments')
+              el-checkbox(
+                v-for='instrument in instrumentsCanditate'
+                :label='instrument'
+                :key='instrument')
+          el-form-item(v-if='instruments.includes("Other")')
+            el-input(
+              v-model='instrumentOther'
+              placeholder='Input instrument(s)')
+          el-form-item(v-if='instruments.length > 1')
+            el-select(
+              v-model='instrumentMain'
+              placeholder='Select your main instrument')
+              el-option(
+                v-for='instrument in instrumentsOrdered'
+                :label='instrument'
+                :key='instrument'
+                :value='instrument')
+        sectionButton
+          g-button(
+            @click='create'
+            type='primary') Submit
+  loading(v-else)
 
 </template>
 
 <script>
 import gButton from '@/components/button'
+import loading from '@/components/loading'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
@@ -57,10 +60,10 @@ import { firestore } from '~/plugins/firebase.js'
 const GUEST_TYPES = ['Player', 'Listener']
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
 export default {
-  components: { gButton, sectionButton, sectionContent, sectionHead },
+  components: { gButton, loading, sectionButton, sectionContent, sectionHead },
   data() {
     return {
-      event: new Event(),
+      event: null,
       name: '',
       instruments: [],
       instrumentMain: '',
@@ -127,9 +130,15 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
-      this.eventDoc.get().then((doc) => {
-        this.event = new Event(doc.data())
-      })
+      this.eventDoc
+        .get()
+        .then((doc) => {
+          if (!doc.exists) throw new Error('Event not found')
+          this.event = new Event(doc.data())
+        })
+        .catch((error) => {
+          throw error
+        })
     }
   }
 }

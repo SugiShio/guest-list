@@ -1,62 +1,65 @@
 <template lang="pug">
 section
-  section-head(
-    :title='event.name'
-    :sub-title='event.dateText')
-    template(#functions)
-      g-button(
-        @click='$router.push({name:"events-eventId"})'
-        size='mini'
-        inline) Detail
-      g-button(
-        @click='$router.push({name:"eventId-enter"})'
-        size='mini'
-        inline) Enter page
-  section-content
-    ul.table
-      li.table__item(v-for='block in guestsCategorised')
-        h1.table__title {{ block.instrument }}
-        ul
-          li.guest(
-            v-for='guest in block.guests'
-            :class='{isSub: guest.isSub, isSelected: guest.isSelected}'
-            @click='updateGuestsSelected(guest.item)')
-            div
-              template(v-if='block.instrument === "Other"') {{ guest.item.guestText }}
-              template(v-else) {{ guest.item.name }}
-            div(v-if='guest.item.count') {{ guest.item.count }}
-  .buttonNewSession(
-    v-if='guestsSelected.length'
-    @click='showModalNewSession = true')
-    |Create a new session
-  modal(
-    v-if='showModalNewSession'
-    @cancel='showModalNewSession = false')
-    section-head(title='New session')
+  loading(v-if='loading')
+  template(v-else)
+    section-head(
+      :title='event.name'
+      :sub-title='event.dateText')
       template(#functions)
         g-button(
-          @click='showModalNewSession = false'
-          type='weak'
-          inline) Close
+          @click='$router.push({name:"events-eventId"})'
+          size='mini'
+          inline) Detail
+        g-button(
+          @click='$router.push({name:"eventId-enter"})'
+          size='mini'
+          inline) Enter page
     section-content
-      el-form(label-position='top')
-        el-form-item(label='Members')
+      ul.table
+        li.table__item(v-for='block in guestsCategorised')
+          h1.table__title {{ block.instrument }}
           ul
-            li(v-for='guest in guestsSelected') {{ guest.guestText }}
-        el-form-item(label='What song will you play?')
-          el-input(v-model='song')
-        section-button
+            li.guest(
+              v-for='guest in block.guests'
+              :class='{isSub: guest.isSub, isSelected: guest.isSelected}'
+              @click='updateGuestsSelected(guest.item)')
+              div
+                template(v-if='block.instrument === "Other"') {{ guest.item.guestText }}
+                template(v-else) {{ guest.item.name }}
+              div(v-if='guest.item.count') {{ guest.item.count }}
+    .buttonNewSession(
+      v-if='guestsSelected.length'
+      @click='showModalNewSession = true')
+      |Create a new session
+    modal(
+      v-if='showModalNewSession'
+      @cancel='showModalNewSession = false')
+      section-head(title='New session')
+        template(#functions)
           g-button(
             @click='showModalNewSession = false'
-            type='weak') Cancel
-          g-button(
-            @click='createSession'
-            type='primary') Start!
+            type='weak'
+            inline) Close
+      section-content
+        el-form(label-position='top')
+          el-form-item(label='Members')
+            ul
+              li(v-for='guest in guestsSelected') {{ guest.guestText }}
+          el-form-item(label='What song will you play?')
+            el-input(v-model='song')
+          section-button
+            g-button(
+              @click='showModalNewSession = false'
+              type='weak') Cancel
+            g-button(
+              @click='createSession'
+              type='primary') Start!
 
 </template>
 
 <script>
 import gButton from '@/components/button'
+import loading from '@/components/loading'
 import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
@@ -68,6 +71,7 @@ const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
 export default {
   components: {
     gButton,
+    loading,
     modal,
     sectionButton,
     sectionContent,
@@ -75,9 +79,10 @@ export default {
   },
   data() {
     return {
-      event: {},
+      event: null,
       guests: [],
       guestsSelected: [],
+      loading: true,
       showModalNewSession: false,
       song: ''
     }
@@ -120,16 +125,23 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
-      this.fetchEvent()
-      this.fetchGuests()
+      Promise.all([this.fetchEvent(), this.fetchGuests()]).then(
+        () => (this.loading = false)
+      )
     },
     fetchEvent() {
-      this.eventDoc.get().then((doc) => {
-        this.event = new Event(doc.data())
-      })
+      return this.eventDoc
+        .get()
+        .then((doc) => {
+          if (!doc.exists) throw new Error('Event not found')
+          this.event = new Event(doc.data())
+        })
+        .catch((error) => {
+          throw error
+        })
     },
     fetchGuests() {
-      this.eventDoc
+      return this.eventDoc
         .collection('guests')
         .get()
         .then((querySnapShot) => {

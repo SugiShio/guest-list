@@ -16,20 +16,21 @@ section
         :event='event'
         @cancel='isEdit = false'
         @submit='update')
-  div(v-else) loading
+  loading(v-else)
 
 </template>
 
 <script>
 import formEvent from '@/components/formEvent'
 import gButton from '@/components/button'
+import loading from '@/components/loading'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 
 export default {
-  components: { formEvent, gButton, sectionContent, sectionHead },
+  components: { formEvent, gButton, loading, sectionContent, sectionHead },
   data() {
     return {
       event: null,
@@ -63,9 +64,7 @@ export default {
       this.eventDoc
         .get()
         .then((doc) => {
-          if (!doc.exists) {
-            throw new Error('Event not found')
-          }
+          if (!doc.exists) throw new Error('Event not found')
           this.event = new Event(doc.data())
         })
         .catch((error) => {
