@@ -2,7 +2,7 @@
 section.head
   h2(v-if='subTitle') {{ subTitle }}
   .head__container
-    h1.head__title(v-if='title') {{ title }}
+    h1.head__title {{ title }}
     div
       slot(name='functions')
   slot(name='content')

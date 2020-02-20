@@ -1,8 +1,12 @@
 <template lang="pug">
 section
-  section-head-event
+  section-head(
+    :title='event.name'
+    :sub-title='event.dateText')
+    template(
+      #content
+      v-if='event.text') {{ event.text }}
   section-content
-    .text(v-if='event.text') {{ event.text }}
     el-form
       el-form-item
         el-input(
@@ -46,14 +50,14 @@ section
 import gButton from '@/components/button'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
-import sectionHeadEvent from '@/components/sectionHeadEvent'
+import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const GUEST_TYPES = ['Player', 'Listener']
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
 export default {
-  components: { gButton, sectionButton, sectionContent, sectionHeadEvent },
+  components: { gButton, sectionButton, sectionContent, sectionHead },
   data() {
     return {
       event: new Event(),
@@ -61,8 +65,7 @@ export default {
       instruments: [],
       instrumentMain: '',
       instrumentOther: '',
-      type: GUEST_TYPES[0],
-      isWide: true
+      type: GUEST_TYPES[0]
     }
   },
   computed: {
@@ -76,22 +79,22 @@ export default {
       return INSTRUMENTS.filter((instrument) =>
         this.instruments.includes(instrument)
       )
+    },
+    uid() {
+      return this.$store.state.uid
     }
   },
   watch: {
     instruments(values) {
       if (values.length <= 1 || !values.includes(this.instrumentMain))
         this.instrumentMain = ''
+    },
+    uid(uid) {
+      if (uid) this.init()
     }
   },
   mounted() {
-    this.setIsWide()
-    window.addEventListener('resize', () => {
-      clearTimeout(this.resizeTimer)
-      this.resizeTimer = setTimeout(() => {
-        this.setIsWide()
-      }, 300)
-    })
+    if (this.uid) this.init()
   },
   methods: {
     create() {
@@ -103,11 +106,7 @@ export default {
         instrumentOther: this.instrumentOther,
         createdAt: new Date().getTime()
       })
-      firestore
-        .collection('users')
-        .doc(this.$store.state.uid)
-        .collection('events')
-        .doc(this.$route.params.eventId)
+      this.eventDoc
         .collection('guests')
         .doc()
         .set({ ...guest })
@@ -122,8 +121,15 @@ export default {
           throw error
         })
     },
-    setIsWide() {
-      this.isWide = window.innerWidth > 600
+    init() {
+      this.eventDoc = firestore
+        .collection('users')
+        .doc(this.$store.state.uid)
+        .collection('events')
+        .doc(this.$route.params.eventId)
+      this.eventDoc.get().then((doc) => {
+        this.event = new Event(doc.data())
+      })
     }
   }
 }

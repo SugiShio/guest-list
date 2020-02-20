@@ -1,16 +1,17 @@
 <template lang="pug">
 section
-  section-head-event
-    g-button(
-      @click='$router.push({name:"events-eventId"})'
-      size='mini'
-      type='weak'
-      inline) Event page
-    g-button(
-      @click='$router.push({name:"eventId-enter"})'
-      size='mini'
-      type='weak'
-      inline) Enter page
+  section-head(
+    :title='event.name'
+    :sub-title='event.dateText')
+    template(#functions)
+      g-button(
+        @click='$router.push({name:"events-eventId"})'
+        size='mini'
+        inline) Detail
+      g-button(
+        @click='$router.push({name:"eventId-enter"})'
+        size='mini'
+        inline) Enter page
   section-content
     ul.table
       li.table__item(v-for='block in guestsCategorised')
@@ -60,7 +61,7 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
-import sectionHeadEvent from '@/components/sectionHeadEvent'
+import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
@@ -70,11 +71,11 @@ export default {
     modal,
     sectionButton,
     sectionContent,
-    sectionHead,
-    sectionHeadEvent
+    sectionHead
   },
   data() {
     return {
+      event: {},
       guests: [],
       guestsSelected: [],
       showModalNewSession: false,
@@ -119,7 +120,13 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
+      this.fetchEvent()
       this.fetchGuests()
+    },
+    fetchEvent() {
+      this.eventDoc.get().then((doc) => {
+        this.event = new Event(doc.data())
+      })
     },
     fetchGuests() {
       this.eventDoc

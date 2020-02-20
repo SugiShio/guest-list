@@ -4,10 +4,12 @@ section
     section-head(
       v-if='!isEdit'
       :title='event.name')
-      template(
-        #functions)
-        a.buttonEdit(@click='isEdit = true')
-          i.el-icon-edit
+      template(#functions)
+        g-button.buttonEdit(
+          @click='isEdit = true'
+          size='mini'
+          inline) Edit
+
     section-content
       form-event(
         :is-edit='isEdit'
@@ -20,13 +22,14 @@ section
 
 <script>
 import formEvent from '@/components/formEvent'
+import gButton from '@/components/button'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 
 export default {
-  components: { formEvent, sectionContent, sectionHead },
+  components: { formEvent, gButton, sectionContent, sectionHead },
   data() {
     return {
       event: null,
