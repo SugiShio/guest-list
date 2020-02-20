@@ -7,10 +7,11 @@ section
         type='weak')
           i.el-icon-plus
           | &nbsp;New Event
-  list
+  list(v-if='events.length')
     list-item(
       v-for='event in events'
-      :key='event.id')
+      :key='event.id'
+      :actions='actions(event)')
       template(#body)
         .eventItem(@click='goto(event)')
           time.eventItem__child(
@@ -41,22 +42,50 @@ export default {
   watch: {
     uid(uid) {
       if (uid) {
-        this.fetchEvents()
+        this.init()
       }
     }
   },
   mounted() {
-    if (this.uid) this.fetchEvents()
+    if (this.uid) this.init()
   },
   methods: {
+    actions(event) {
+      return [
+        {
+          label: 'Detail',
+          action: () => {
+            this.$router.push({
+              name: 'events-eventId',
+              params: { eventId: event.id }
+            })
+          }
+        },
+        {
+          label: 'Delete',
+          color: 'red',
+          action: () => {
+            if (!confirm(`Are you sure to delete an event "${event.name}" ?`))
+              return
+            this.eventCollection
+              .doc(event.id)
+              .delete()
+              .then(() => {
+                this.fetchEvents()
+              })
+              .catch((error) => {
+                throw error
+              })
+          }
+        }
+      ]
+    },
     fetchEvents() {
-      firestore
-        .collection('users')
-        .doc(this.$store.state.uid)
-        .collection('events')
-        .orderBy('createdAt', 'desc')
+      this.eventCollection
+        .orderBy('openAt', 'desc')
         .get()
         .then((querySnapShot) => {
+          this.events = []
           querySnapShot.forEach((doc) => {
             const event = new Event({ ...doc.data(), id: doc.id })
             this.events.push(event)
@@ -73,6 +102,13 @@ export default {
           eventId: item.id
         }
       })
+    },
+    init() {
+      this.eventCollection = firestore
+        .collection('users')
+        .doc(this.$store.state.uid)
+        .collection('events')
+      this.fetchEvents()
     }
   }
 }
