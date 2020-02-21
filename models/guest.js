@@ -28,21 +28,29 @@ export class Guest {
     return `${this.name} (${instrument})`
   }
 
-  static validate(params = {}) {
-    const errors = {}
-    if (!params.name) errors.name = 'Name is required'
-    if (params.type === GUEST_TYPES.player) {
-      if (!params.instruments.length) {
-        errors.instruments = 'At least one instrument must be selected'
-      } else if (params.instruments.length > 1) {
-        if (!params.instrumentMain)
-          errors.instrumentMain = 'Main instrument must be selected'
-      }
-      if (params.instruments.includes(INSTRUMENTS.other)) {
-        if (!params.instrumentOther)
-          errors.instrumentOther = 'An instrument is required'
-      }
+  static validate = {
+    name(params = {}) {
+      return params.name ? undefined : 'Name is required'
+    },
+    instruments(params = {}) {
+      if (params.type === GUEST_TYPES.player && !params.instruments.length)
+        return 'At least one instrument must be selected'
+    },
+    instrumentOther(params = {}) {
+      if (
+        params.instruments &&
+        params.instruments.includes(INSTRUMENTS.other) &&
+        !params.instrumentOther
+      )
+        return 'An instrument is required'
+    },
+    instrumentMain(params = {}) {
+      if (
+        params.instruments &&
+        params.instruments.length > 1 &&
+        !params.instrumentMain
+      )
+        return 'Main instrument must be selected'
     }
-    return errors
   }
 }

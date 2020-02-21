@@ -70,39 +70,20 @@ const instrumentsCanditate = Object.values(INSTRUMENTS)
 export default {
   components: { gButton, loading, sectionButton, sectionContent, sectionHead },
   data() {
+    const validators = {}
+    const keys = ['name', 'instruments', 'instrumentMain', 'instrumentOther']
+    keys.forEach((key) => {
+      validators[key] = {
+        validator: (rule, value, callback) => {
+          callback(Guest.validate[key](this.guest))
+        },
+        trigger: 'none'
+      }
+    })
     return {
       guest: new Guest(),
       event: null,
-      rules: {
-        name: {
-          validator: (rule, value, callback) => {
-            const result = Guest.validate(this.guest).name
-            callback(result)
-          },
-          trigger: 'blur'
-        },
-        instruments: {
-          validator: (rule, value, callback) => {
-            const result = Guest.validate(this.guest).instruments
-            callback(result)
-          },
-          trigger: 'blur'
-        },
-        instrumentMain: {
-          validator: (rule, value, callback) => {
-            const result = Guest.validate(this.guest).instrumentMain
-            callback(result)
-          },
-          trigger: 'blur'
-        },
-        instrumentOther: {
-          validator: (rule, value, callback) => {
-            const result = Guest.validate(this.guest).instrumentOther
-            callback(result)
-          },
-          trigger: 'blur'
-        }
-      }
+      rules: validators
     }
   },
   computed: {
