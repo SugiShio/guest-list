@@ -22,7 +22,7 @@ section
               v-for='type in guestTypes'
               :label='type'
               :key='type')
-        template(v-if='guest.type === "Player"')
+        template(v-if='guest.isPlayer')
           el-form-item(prop='instruments')
             el-checkbox-group(
               v-model='guest.instruments')
@@ -31,7 +31,7 @@ section
                 :label='instrument'
                 :key='instrument')
           el-form-item(
-            v-if='guest.instruments.includes("Other")'
+            v-if='guest.hasInstrumentOther'
             prop='instrumentOther')
             el-input(
               v-model='guest.instrumentOther'
@@ -71,13 +71,7 @@ export default {
   components: { gButton, loading, sectionButton, sectionContent, sectionHead },
   data() {
     return {
-      guest: {
-        name: '',
-        instruments: [],
-        instrumentMain: '',
-        instrumentOther: '',
-        type: guestTypes[0]
-      },
+      guest: new Guest(),
       event: null,
       rules: {
         name: {
@@ -157,11 +151,7 @@ export default {
         .doc()
         .set({ ...new Guest(guest) })
         .then((responce) => {
-          this.guest.name = ''
-          this.guest.instruments = []
-          this.guest.instrumentMain = ''
-          this.guest.instrumentOther = ''
-          this.guest.type = guestTypes[0]
+          this.guest = new Guest()
         })
         .catch((error) => {
           throw error
