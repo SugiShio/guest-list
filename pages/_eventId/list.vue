@@ -24,8 +24,9 @@ section
               :class='{isSub: guest.isSub, isSelected: guest.isSelected}'
               @click='updateGuestsSelected(guest.item)')
               div
-                template(v-if='block.instrument === "Other"') {{ guest.item.guestText }}
-                template(v-else) {{ guest.item.name }}
+                | {{ guest.item.name }}
+                template(v-if='block.instrument === "Other"')
+                  | &nbsp;({{ guest.item.instrumentOther }})
               div(v-if='guest.item.count') {{ guest.item.count }}
     .buttonNewSession(
       v-if='guestsSelected.length'
@@ -64,10 +65,11 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
+import { INSTRUMENTS } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
-const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
+const instruments = Object.values(INSTRUMENTS)
 export default {
   components: {
     gButton,
@@ -89,7 +91,7 @@ export default {
   },
   computed: {
     guestsCategorised() {
-      return INSTRUMENTS.map((instrument) => {
+      return instruments.map((instrument) => {
         const guests = this.guests
           .filter((guest) => guest.instruments.includes(instrument))
           .map((guest) => {
