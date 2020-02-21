@@ -1,5 +1,6 @@
+import { GUEST_TYPES, INSTRUMENTS } from '@/constants'
 export class Guest {
-  constructor(params) {
+  constructor(params = {}) {
     this.name = params.name || 'No name guest'
     this.type = params.type
     this.count = params.count || 0
@@ -22,5 +23,23 @@ export class Guest {
         ? this.instrumentOther
         : this.instrumentMain
     return `${this.name} (${instrument})`
+  }
+
+  static validate(params = {}) {
+    const errors = {}
+    if (!params.name) errors.name = 'Name is required'
+    if (params.type === GUEST_TYPES.player) {
+      if (!params.instruments.length) {
+        errors.instruments = 'At least one instrument must be selected'
+      } else if (params.instruments.length > 1) {
+        if (!params.instrumentMain)
+          errors.instrumentMain = 'Main instrument must be selected'
+      }
+      if (params.instruments.includes(INSTRUMENTS.other)) {
+        if (!params.instrumentOther)
+          errors.instrumentOther = 'An instrument is required'
+      }
+    }
+    return errors
   }
 }

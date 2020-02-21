@@ -8,32 +8,39 @@ section
         #content
         v-if='event.text') {{ event.text }}
     section-content
-      el-form
-        el-form-item
+      el-form(
+        :model='guest'
+        :rules='rules'
+        ref='form')
+        el-form-item(prop='name')
           el-input(
-            v-model='name'
+            v-model='guest.name'
             placeholder='Name')
-        el-form-item
-          el-radio-group(v-model='type')
+        el-form-item(prop='type')
+          el-radio-group(v-model='guest.type')
             el-radio(
               v-for='type in guestTypes'
               :label='type'
               :key='type')
-        template(v-if='type === "Player"')
-          el-form-item
+        template(v-if='guest.type === "Player"')
+          el-form-item(prop='instruments')
             el-checkbox-group(
-              v-model='instruments')
+              v-model='guest.instruments')
               el-checkbox(
                 v-for='instrument in instrumentsCanditate'
                 :label='instrument'
                 :key='instrument')
-          el-form-item(v-if='instruments.includes("Other")')
+          el-form-item(
+            v-if='guest.instruments.includes("Other")'
+            prop='instrumentOther')
             el-input(
-              v-model='instrumentOther'
+              v-model='guest.instrumentOther'
               placeholder='Input instrument(s)')
-          el-form-item(v-if='instruments.length > 1')
+          el-form-item(
+            v-if='guest.instruments.length > 1'
+            prop='instrumentMain')
             el-select(
-              v-model='instrumentMain'
+              v-model='guest.instrumentMain'
               placeholder='Select your main instrument')
               el-option(
                 v-for='instrument in instrumentsOrdered'
@@ -54,33 +61,66 @@ import loading from '@/components/loading'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
+import { GUEST_TYPES, INSTRUMENTS } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
-const GUEST_TYPES = ['Player', 'Listener']
-const INSTRUMENTS = ['Guitar', 'Keyboard', 'Bass', 'Drums', 'Other']
+const guestTypes = Object.values(GUEST_TYPES)
+const instrumentsCanditate = Object.values(INSTRUMENTS)
 export default {
   components: { gButton, loading, sectionButton, sectionContent, sectionHead },
   data() {
     return {
+      guest: {
+        name: '',
+        instruments: [],
+        instrumentMain: '',
+        instrumentOther: '',
+        type: guestTypes[0]
+      },
       event: null,
-      name: '',
-      instruments: [],
-      instrumentMain: '',
-      instrumentOther: '',
-      type: GUEST_TYPES[0]
+      rules: {
+        name: {
+          validator: (rule, value, callback) => {
+            const result = Guest.validate(this.guest).name
+            callback(result)
+          },
+          trigger: 'blur'
+        },
+        instruments: {
+          validator: (rule, value, callback) => {
+            const result = Guest.validate(this.guest).instruments
+            callback(result)
+          },
+          trigger: 'blur'
+        },
+        instrumentMain: {
+          validator: (rule, value, callback) => {
+            const result = Guest.validate(this.guest).instrumentMain
+            callback(result)
+          },
+          trigger: 'blur'
+        },
+        instrumentOther: {
+          validator: (rule, value, callback) => {
+            const result = Guest.validate(this.guest).instrumentOther
+            callback(result)
+          },
+          trigger: 'blur'
+        }
+      }
     }
   },
   computed: {
     guestTypes() {
-      return GUEST_TYPES
+      return guestTypes
     },
     instrumentsCanditate() {
-      return INSTRUMENTS
+      return instrumentsCanditate
     },
     instrumentsOrdered() {
-      return INSTRUMENTS.filter((instrument) =>
-        this.instruments.includes(instrument)
+      return instrumentsCanditate.filter((instrument) =>
+        this.guest.instruments.includes(instrument)
       )
     },
     uid() {
@@ -88,9 +128,9 @@ export default {
     }
   },
   watch: {
-    instruments(values) {
-      if (values.length <= 1 || !values.includes(this.instrumentMain))
-        this.instrumentMain = ''
+    'guest.instruments'(values) {
+      if (values.length <= 1 || !values.includes(this.guest.instrumentMain))
+        this.guest.instrumentMain = null
     },
     uid(uid) {
       if (uid) this.init()
@@ -101,24 +141,27 @@ export default {
   },
   methods: {
     create() {
-      const guest = new Guest({
-        name: this.name,
-        type: this.type,
-        instruments: this.instrumentsOrdered,
-        instrumentMain: this.instrumentMain,
-        instrumentOther: this.instrumentOther,
-        createdAt: new Date().getTime()
+      let isValid = false
+      this.$refs.form.validate((valid) => {
+        isValid = valid
       })
+      if (!isValid) return
+
+      const guest = {
+        ...this.guest,
+        instruments: this.instrumentsOrdered,
+        createdAt: new Date().getTime()
+      }
       this.eventDoc
         .collection('guests')
         .doc()
-        .set({ ...guest })
+        .set({ ...new Guest(guest) })
         .then((responce) => {
-          this.name = ''
-          this.instruments = []
-          this.instrumentMain = ''
-          this.instrumentOther = ''
-          this.type = GUEST_TYPES[0]
+          this.guest.name = ''
+          this.guest.instruments = []
+          this.guest.instrumentMain = ''
+          this.guest.instrumentOther = ''
+          this.guest.type = guestTypes[0]
         })
         .catch((error) => {
           throw error
@@ -144,8 +187,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.text {
-  margin-bottom: 20px;
-}
-</style>
+<style lang="scss" scoped></style>
