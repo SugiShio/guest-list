@@ -54,11 +54,13 @@ section
             g-button(
               @click='createSession'
               type='primary') Start!
+  loading(v-else)
 
 </template>
 
 <script>
 import gButton from '@/components/button'
+import loading from '@/components/loading'
 import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
@@ -71,6 +73,7 @@ const instruments = Object.values(INSTRUMENTS)
 export default {
   components: {
     gButton,
+    loading,
     modal,
     sectionButton,
     sectionContent,
@@ -81,6 +84,7 @@ export default {
       event: null,
       guests: [],
       guestsSelected: [],
+      isLoaded: false,
       showModalNewSession: false,
       song: ''
     }
@@ -104,9 +108,6 @@ export default {
         return { instrument, guests }
       })
     },
-    isLoaded() {
-      return !this.$store.state.isLoading
-    },
     uid() {
       return this.$store.state.uid
     }
@@ -117,7 +118,6 @@ export default {
     }
   },
   created() {
-    this.$store.commit('setLoading')
     if (this.uid) this.init()
   },
   methods: {
@@ -127,10 +127,14 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
+      this.$store.commit('resetError')
       Promise.all([this.fetchEvent(), this.fetchGuests()])
-        .then(() => this.$store.commit('setLoaded'))
+        .then(() => {
+          this.isLoaded = true
+        })
         .catch((error) => {
-          this.$store.commit('setLoadedWithError', { error })
+          this.isLoaded = true
+          this.$store.commit('setError', { error })
           throw error
         })
     },

@@ -1,9 +1,8 @@
 <template lang="pug">
 div
-  loading(v-if='isLoading')
   error(v-if='hasError')
   div(v-show='!hasError')
-    header.header
+    header.header(v-if='isSignin')
       .header__inner
         a.backButton(@click='back')
           i.el-icon-arrow-left
@@ -15,16 +14,12 @@ div
 <script>
 import error from '@/components/error'
 import gMenu from '@/components/menu'
-import loading from '@/components/loading'
 import { auth } from '~/plugins/firebase.js'
 export default {
-  components: { error, gMenu, loading },
+  components: { error, gMenu },
   computed: {
     hasError() {
-      return !this.$store.state.isLoading && !!this.$store.state.error
-    },
-    isLoading() {
-      return this.$store.state.isLoading
+      return !!this.$store.state.error
     },
     isSignin() {
       return this.$store.state.isSignin

@@ -6,13 +6,7 @@ section-content
 <script>
 import sectionContent from '@/components/sectionContent'
 export default {
-  components: { sectionContent },
-  created() {
-    this.$store.commit('setLoaded')
-  },
-  mounted() {
-    this.$store.commit('setLoaded')
-  }
+  components: { sectionContent }
 }
 </script>
 <style></style>

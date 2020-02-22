@@ -14,7 +14,6 @@ const provider = new firebase.auth.GoogleAuthProvider()
 export default {
   components: { gButton },
   created() {
-    this.$store.commit('setLoaded')
     if (this.$store.state.isSignin) {
       this.$router.push('/')
     }

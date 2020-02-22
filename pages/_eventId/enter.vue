@@ -51,11 +51,13 @@ section
           g-button(
             @click='create'
             type='primary') Submit
+  loading(v-else)
 
 </template>
 
 <script>
 import gButton from '@/components/button'
+import loading from '@/components/loading'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
@@ -66,7 +68,7 @@ import { firestore } from '~/plugins/firebase.js'
 const guestTypes = Object.values(GUEST_TYPES)
 const instrumentsCanditate = Object.values(INSTRUMENTS)
 export default {
-  components: { gButton, sectionButton, sectionContent, sectionHead },
+  components: { gButton, loading, sectionButton, sectionContent, sectionHead },
   data() {
     const validators = {}
     const keys = ['name', 'instruments', 'instrumentMain', 'instrumentOther']
@@ -110,7 +112,6 @@ export default {
     }
   },
   created() {
-    this.$store.commit('setLoading')
     if (this.uid) this.init()
   },
   methods: {
@@ -143,15 +144,15 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
+      this.$store.commit('resetError')
       this.eventDoc
         .get()
         .then((doc) => {
           if (!doc.exists) throw new Error('Event not found')
           this.event = new Event(doc.data())
-          this.$store.commit('setLoaded')
         })
         .catch((error) => {
-          this.$store.commit('setLoadedWithError', { error })
+          this.$store.commit('setError', { error })
           throw error
         })
     }

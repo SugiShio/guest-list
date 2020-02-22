@@ -15,7 +15,7 @@ export default {
   },
   components: { error },
   created() {
-    this.$store.commit('setLoadedWithError', { error: this.error })
+    this.$store.commit('setError', { error: this.error })
   }
 }
 </script>

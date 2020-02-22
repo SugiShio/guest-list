@@ -1,35 +1,39 @@
 <template lang="pug">
 section
-  section-head(title='Events')
-    template(#functions)
-      g-button(
-        @click='$router.push({name:"events-new"})'
-        size='mini'
-        inline)
-          i.el-icon-plus
-          | &nbsp;New Event
-  list(v-if='events.length')
-    list-item(
-      v-for='event in events'
-      :key='event.id'
-      :actions='actions(event)')
-      template(#body)
-        .eventItem(@click='goto(event)')
-          time.eventItem__child(
-            :datetime='event.dateMeta')
-            |{{ event.dateText }}
-          .eventItem__child.eventItem__child--main {{ event.name }}
+  template(v-if='events.length')
+    section-head(title='Events')
+      template(#functions)
+        g-button(
+          @click='$router.push({name:"events-new"})'
+          size='mini'
+          inline)
+            i.el-icon-plus
+            | &nbsp;New Event
+    list
+      list-item(
+        v-for='event in events'
+        :key='event.id'
+        :actions='actions(event)')
+        template(#body)
+          .eventItem(@click='goto(event)')
+            time.eventItem__child(
+              :datetime='event.dateMeta')
+              |{{ event.dateText }}
+            .eventItem__child.eventItem__child--main {{ event.name }}
+  loading(v-else)
+
 </template>
 
 <script>
 import gButton from '@/components/button'
 import list from '@/components/list'
 import listItem from '@/components/listItem'
+import loading from '@/components/loading'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 export default {
-  components: { gButton, list, listItem, sectionHead },
+  components: { gButton, list, listItem, loading, sectionHead },
   data() {
     return {
       events: []
@@ -48,7 +52,6 @@ export default {
     }
   },
   created() {
-    this.$store.commit('setLoading')
     if (this.uid) this.init()
   },
   methods: {
@@ -83,6 +86,7 @@ export default {
       ]
     },
     fetchEvents() {
+      this.$store.commit('resetError')
       return this.eventCollection
         .orderBy('openAt', 'desc')
         .get()
@@ -110,12 +114,10 @@ export default {
         .collection('users')
         .doc(this.uid)
         .collection('events')
-      this.fetchEvents()
-        .then(() => this.$store.commit('setLoaded'))
-        .catch((error) => {
-          this.$store.commit('setLoadedWithError', { error })
-          throw error
-        })
+      this.fetchEvents().catch((error) => {
+        this.$store.commit('setError', { error })
+        throw error
+      })
     }
   }
 }

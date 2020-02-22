@@ -1,25 +1,19 @@
 export const state = () => ({
   error: null,
-  isLoading: true,
   isSignin: false,
   uid: null
 })
 
 export const mutations = {
-  setLoading(state) {
-    state.isLoading = true
-  },
-  setLoaded(state) {
-    state.error = null
-    state.isLoading = false
-  },
-  setLoadedWithError(state, { error }) {
+  setError(state, { error }) {
     state.error = error
-    state.isLoading = false
   },
   setUser(state, { uid }) {
     state.isSignin = true
     state.uid = uid
+  },
+  resetError(state) {
+    state.error = null
   },
   resetUser(state) {
     state.isSignin = false

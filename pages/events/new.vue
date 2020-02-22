@@ -35,9 +35,6 @@ export default {
       isWide: true
     }
   },
-  created() {
-    this.$store.commit('setLoaded')
-  },
   methods: {
     back() {
       history.back()
@@ -65,7 +62,7 @@ export default {
           this.$router.push({ name: 'events' })
         })
         .catch((error) => {
-          this.$store.commit('setLoadedWithError', { error })
+          this.$store.commit('setError', { error })
           throw error
         })
     }
