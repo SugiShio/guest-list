@@ -1,4 +1,4 @@
-const SITE_TITLE = 'Guests list creator'
+const SITE_TITLE = 'Guest list creator'
 const SITE_DESCRIPTION = 'Easily and simply create a list of guests!'
 const SITE_URL = 'http://guests.tokyosession.tokyo'
 module.exports = {
