@@ -1,14 +1,13 @@
 <template lang="pug">
 div
   error(v-if='hasError')
-  div(v-show='!hasError')
-    header.header(v-if='isSignin')
-      .header__inner
-        a.backButton(@click='back')
-          i.el-icon-arrow-left
-        g-menu(@signout='signout')
-    main.wrapper
-      nuxt
+  header.header
+    .header__inner(v-if='isSignin')
+      a.backButton(@click='back')
+        i.el-icon-arrow-left
+      g-menu(@signout='signout')
+  main.wrapper(v-show='!hasError')
+    nuxt
 </template>
 
 <script>
@@ -62,6 +61,7 @@ $width-wrapper: 1024px;
 }
 
 .header {
+  height: 50px;
   &__inner {
     display: flex;
     justify-content: space-between;

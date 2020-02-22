@@ -1,10 +1,13 @@
+const SITE_TITLE = 'Guests list creator'
+const SITE_DESCRIPTION = 'Easily and simply create a list of guests!'
+const SITE_URL = 'http://guests.tokyosession.tokyo'
 module.exports = {
   mode: 'universal',
   /*
    ** Headers of the page
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: SITE_TITLE,
     meta: [
       { charset: 'utf-8' },
       {
@@ -15,10 +18,31 @@ module.exports = {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: SITE_DESCRIPTION
+      },
+      { hid: 'og:title', property: 'og:title', content: SITE_TITLE },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: SITE_DESCRIPTION
+      },
+      { hid: 'og:site_name', property: 'og:site_name', content: SITE_TITLE },
+      { hid: 'og:type', property: 'og:type', content: 'article' },
+      { hid: 'og:url', property: 'og:url', content: SITE_URL },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: `${SITE_URL}/ogp.jpg`
+      },
+      { hid: 'twitter:card', name: 'twitter:card', content: 'summary' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Asap&display=swap'
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color
