@@ -1,15 +1,18 @@
 <template lang="pug">
-div
-  a(
-    @click='signinWithGoogle'
-  ) Sign in with Google
+.signin
+  .signin__buttons
+    g-button(
+      @click='signinWithGoogle'
+      inline) Sign in with Google
 </template>
 
 <script>
+import gButton from '@/components/button'
 import firebase, { auth } from '~/plugins/firebase.js'
 const provider = new firebase.auth.GoogleAuthProvider()
 
 export default {
+  components: { gButton },
   created() {
     this.$store.commit('setLoaded')
     if (this.$store.state.isSignin) {
@@ -33,3 +36,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '../assets/stylesheets/variables';
+.signin {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+</style>
