@@ -19,19 +19,17 @@ section
             :datetime='event.dateMeta')
             |{{ event.dateText }}
           .eventItem__child.eventItem__child--main {{ event.name }}
-  loading(v-else)
 </template>
 
 <script>
 import gButton from '@/components/button'
 import list from '@/components/list'
 import listItem from '@/components/listItem'
-import loading from '@/components/loading'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 export default {
-  components: { gButton, list, listItem, loading, sectionHead },
+  components: { gButton, list, listItem, sectionHead },
   data() {
     return {
       events: []
@@ -110,7 +108,7 @@ export default {
     init() {
       this.eventCollection = firestore
         .collection('users')
-        .doc(this.$store.state.uid)
+        .doc(this.uid)
         .collection('events')
       this.fetchEvents()
         .then(() => this.$store.commit('setLoaded'))
