@@ -32,7 +32,7 @@ export default {
   cursor: pointer;
   &.block {
     display: block;
-    min-width: 140px;
+    min-width: 160px;
   }
   &.inline + &.inline {
     margin-left: 5px;
