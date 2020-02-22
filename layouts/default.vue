@@ -7,9 +7,7 @@ div
       .header__inner
         a.backButton(@click='back')
           i.el-icon-arrow-left
-        g-menu(
-          v-if='isSignin'
-          @signout='signout')
+        g-menu(@signout='signout')
     main.wrapper
       nuxt
 </template>
