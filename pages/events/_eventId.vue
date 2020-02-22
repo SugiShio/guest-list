@@ -5,7 +5,11 @@ section
       v-if='!isEdit'
       :title='event.name')
       template(#functions)
-        g-button.buttonEdit(
+        g-button(
+          @click='$router.push({name:"eventId-list"})'
+          size='mini'
+          inline) Guest list
+        g-button(
           @click='isEdit = true'
           size='mini'
           inline) Edit

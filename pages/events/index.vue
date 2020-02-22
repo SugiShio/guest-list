@@ -122,6 +122,7 @@ export default {
 .eventItem {
   display: flex;
   margin: -10px;
+  width: 100%;
 
   &__child {
     min-width: 150px;

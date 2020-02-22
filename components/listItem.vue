@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/stylesheets/variables.scss';
+@import '../assets/stylesheets/variables';
 .listItem {
   position: relative;
   border-bottom: 1px solid #eee;
@@ -53,9 +53,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-grow: 1;
     padding: 0 20px;
     background-color: #fff;
-    transition: transform 0.5s;
+    transition: transform 0.5s, background-color $transition-default;
+    cursor: pointer;
+    &:hover {
+      background-color: #eee;
+    }
   }
 
   &__actions {
