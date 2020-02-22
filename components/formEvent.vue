@@ -155,6 +155,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/stylesheets/utils';
 .arrayForm {
   display: flex;
   align-items: center;
@@ -163,22 +164,10 @@ export default {
     flex-grow: 1;
   }
   &__button {
+    @extend %hoverOpacity;
     padding: 0 10px;
     font-size: 18px;
     color: #888;
-    transition: opacity 0.3s;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-}
-.buttonEdit {
-  padding: 5px 10px;
-  transition: opacity 0.3s;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.5;
   }
 }
 .showItem {

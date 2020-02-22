@@ -1,16 +1,31 @@
 <template lang="pug">
 div
-  header
-    a(
-      @click='signout'
-      ) Sign Out
-  div
+  header.header
+    .header__inner
+      a.backButton(
+        v-if='hasHistory'
+        @click='back')
+        i.el-icon-arrow-left
+      g-menu(
+        v-if='isSignin'
+        @signout='signout')
+  div.wrapper
     nuxt
 </template>
 
 <script>
+import gMenu from '@/components/menu'
 import { auth } from '~/plugins/firebase.js'
 export default {
+  components: { gMenu },
+  computed: {
+    hasHistory() {
+      return history.length > 1
+    },
+    isSignin() {
+      return this.$store.state.isSignin
+    }
+  },
   created() {
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -26,6 +41,9 @@ export default {
     })
   },
   methods: {
+    back() {
+      history.back()
+    },
     signout() {
       auth.signOut().then(() => {
         this.$store.dispatch('signout')
@@ -36,4 +54,28 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '../assets/stylesheets/utils';
+$width-wrapper: 1024px;
+.wrapper {
+  max-width: $width-wrapper;
+  margin: auto;
+}
+
+.header {
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: $width-wrapper;
+    margin: auto;
+  }
+}
+.backButton {
+  @extend %hoverOpacity;
+  width: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 24px;
+}
+</style>

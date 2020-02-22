@@ -212,7 +212,7 @@ export default {
     padding: 5px;
   }
   &__title {
-    border-bottom: 2px solid #e50012;
+    border-bottom: 2px solid $color-accent;
     padding: 5px;
     margin: 10px 0;
     @include screensize-lg {
@@ -227,7 +227,7 @@ export default {
   border-radius: 3px;
   cursor: pointer;
   padding: 5px 10px;
-  transition: background-color 0.3s;
+  transition: background-color $transition-default;
   &:hover {
     background-color: #eee;
   }
@@ -235,7 +235,7 @@ export default {
     opacity: 0.6;
   }
   &.isSelected {
-    background-color: #e50012;
+    background-color: $color-accent;
     > div {
       color: #fff;
       font-weight: bold;
@@ -246,19 +246,15 @@ export default {
   }
 }
 .buttonNewSession {
+  @extend %hoverOpacity;
   position: fixed;
   right: 20px;
   bottom: 15px;
   left: 20px;
   padding: 10px;
-  background-color: #e50012;
+  background-color: $color-accent;
   border-radius: 3px;
   text-align: center;
   color: #fff;
-  transition: opacity 0.3s;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.6;
-  }
 }
 </style>

@@ -21,13 +21,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/stylesheets/utils';
 .button {
   display: inline-block;
   padding: 7px 20px;
   background-color: #eee;
   border-radius: 3px;
   text-align: center;
-  transition: background-color 0.3s;
+  transition: background-color $transition-default;
   cursor: pointer;
   &.block {
     display: block;
@@ -45,10 +46,10 @@ export default {
   }
   &.primary {
     background-color: transparent;
-    border: 1px solid #e50012;
+    border: 1px solid $color-accent;
     &:hover {
       color: #fff;
-      background-color: #e50012;
+      background-color: $color-accent;
     }
   }
   &.weak {
