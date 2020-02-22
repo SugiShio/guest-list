@@ -111,7 +111,7 @@ export default {
   bottom: 0;
   left: 100%;
   width: 300px;
-  padding: 20px 0;
+  padding: 10px 0;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(#000, 0.1);
   z-index: $z-index-menu + 1;
