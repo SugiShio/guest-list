@@ -1,5 +1,6 @@
 <template lang="pug">
 el-form(
+  v-if='eventCopied'
   :label-position='labelPosition'
   label-width='120px')
   el-form-item(
@@ -94,7 +95,7 @@ export default {
   data() {
     return {
       date: this.event.startAt,
-      eventCopied: new Event(),
+      eventCopied: null,
       isWide: false
     }
   },
@@ -127,6 +128,7 @@ export default {
     }
   },
   mounted() {
+    this.eventCopied = { ...this.event, date: this.event.startAt }
     this.setIsWide()
     window.addEventListener('resize', () => {
       clearTimeout(this.resizeTimer)
