@@ -4,9 +4,7 @@ div
   template(v-show='!isLoading')
     header.header
       .header__inner
-        a.backButton(
-          v-if='hasHistory'
-          @click='back')
+        a.backButton(@click='back')
           i.el-icon-arrow-left
         g-menu(
           v-if='isSignin'
@@ -22,9 +20,6 @@ import { auth } from '~/plugins/firebase.js'
 export default {
   components: { gMenu, loading },
   computed: {
-    hasHistory() {
-      return history.length > 1
-    },
     isLoading() {
       return this.$store.state.isLoading
     },
@@ -48,7 +43,7 @@ export default {
   },
   methods: {
     back() {
-      history.back()
+      this.$router.go(-1)
     },
     signout() {
       auth.signOut().then(() => {
