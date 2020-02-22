@@ -1,7 +1,8 @@
 <template lang="pug">
 div
   loading(v-if='isLoading')
-  template(v-show='!isLoading')
+  error(v-if='hasError')
+  div(v-show='!hasError')
     header.header
       .header__inner
         a.backButton(@click='back')
@@ -9,17 +10,21 @@ div
         g-menu(
           v-if='isSignin'
           @signout='signout')
-    div.wrapper
+    main.wrapper
       nuxt
 </template>
 
 <script>
+import error from '@/components/error'
 import gMenu from '@/components/menu'
 import loading from '@/components/loading'
 import { auth } from '~/plugins/firebase.js'
 export default {
-  components: { gMenu, loading },
+  components: { error, gMenu, loading },
   computed: {
+    hasError() {
+      return !this.$store.state.isLoading && !!this.$store.state.error
+    },
     isLoading() {
       return this.$store.state.isLoading
     },

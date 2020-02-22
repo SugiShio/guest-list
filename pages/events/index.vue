@@ -112,7 +112,12 @@ export default {
         .collection('users')
         .doc(this.$store.state.uid)
         .collection('events')
-      this.fetchEvents().then(() => this.$store.commit('setLoaded'))
+      this.fetchEvents()
+        .then(() => this.$store.commit('setLoaded'))
+        .catch((error) => {
+          this.$store.commit('setLoadedWithError', { error })
+          throw error
+        })
     }
   }
 }

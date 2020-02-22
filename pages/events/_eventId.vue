@@ -61,9 +61,14 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.eventId)
-      this.fetchEvent().then(() => {
-        this.$store.commit('setLoaded')
-      })
+      this.fetchEvent()
+        .then(() => {
+          this.$store.commit('setLoaded')
+        })
+        .catch((error) => {
+          this.$store.commit('setLoadedWithError', { error })
+          throw error
+        })
     },
     fetchEvent() {
       return this.eventDoc

@@ -1,4 +1,5 @@
 export const state = () => ({
+  error: null,
   isLoading: true,
   isSignin: false,
   uid: null
@@ -9,6 +10,11 @@ export const mutations = {
     state.isLoading = true
   },
   setLoaded(state) {
+    state.error = null
+    state.isLoading = false
+  },
+  setLoadedWithError(state, { error }) {
+    state.error = error
     state.isLoading = false
   },
   setUser(state, { uid }) {

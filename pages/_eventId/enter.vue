@@ -151,6 +151,7 @@ export default {
           this.$store.commit('setLoaded')
         })
         .catch((error) => {
+          this.$store.commit('setLoadedWithError', { error })
           throw error
         })
     }

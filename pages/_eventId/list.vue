@@ -127,9 +127,12 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
-      Promise.all([this.fetchEvent(), this.fetchGuests()]).then(() =>
-        this.$store.commit('setLoaded')
-      )
+      Promise.all([this.fetchEvent(), this.fetchGuests()])
+        .then(() => this.$store.commit('setLoaded'))
+        .catch((error) => {
+          this.$store.commit('setLoadedWithError', { error })
+          throw error
+        })
     },
     fetchEvent() {
       return this.eventDoc

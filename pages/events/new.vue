@@ -65,6 +65,7 @@ export default {
           this.$router.push({ name: 'events' })
         })
         .catch((error) => {
+          this.$store.commit('setLoadedWithError', { error })
           throw error
         })
     }
