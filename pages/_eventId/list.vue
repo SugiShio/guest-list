@@ -1,7 +1,6 @@
 <template lang="pug">
 section
-  loading(v-if='loading')
-  template(v-else)
+  template(v-if='isLoaded')
     section-head(
       :title='event.name'
       :sub-title='event.dateText')
@@ -60,7 +59,6 @@ section
 
 <script>
 import gButton from '@/components/button'
-import loading from '@/components/loading'
 import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
@@ -73,7 +71,6 @@ const instruments = Object.values(INSTRUMENTS)
 export default {
   components: {
     gButton,
-    loading,
     modal,
     sectionButton,
     sectionContent,
@@ -84,7 +81,6 @@ export default {
       event: null,
       guests: [],
       guestsSelected: [],
-      loading: true,
       showModalNewSession: false,
       song: ''
     }
@@ -108,6 +104,9 @@ export default {
         return { instrument, guests }
       })
     },
+    isLoaded() {
+      return !this.$store.state.isLoading
+    },
     uid() {
       return this.$store.state.uid
     }
@@ -117,7 +116,8 @@ export default {
       if (uid) this.init()
     }
   },
-  mounted() {
+  created() {
+    this.$store.commit('setLoading')
     if (this.uid) this.init()
   },
   methods: {
@@ -127,8 +127,8 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.$route.params.eventId)
-      Promise.all([this.fetchEvent(), this.fetchGuests()]).then(
-        () => (this.loading = false)
+      Promise.all([this.fetchEvent(), this.fetchGuests()]).then(() =>
+        this.$store.commit('setLoaded')
       )
     },
     fetchEvent() {

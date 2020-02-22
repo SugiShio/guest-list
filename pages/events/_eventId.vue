@@ -16,21 +16,19 @@ section
         :event='event'
         @cancel='isEdit = false'
         @submit='update')
-  loading(v-else)
 
 </template>
 
 <script>
 import formEvent from '@/components/formEvent'
 import gButton from '@/components/button'
-import loading from '@/components/loading'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 import { firestore } from '~/plugins/firebase.js'
 
 export default {
-  components: { formEvent, gButton, loading, sectionContent, sectionHead },
+  components: { formEvent, gButton, sectionContent, sectionHead },
   data() {
     return {
       event: null,
@@ -48,7 +46,8 @@ export default {
       if (uid) this.init()
     }
   },
-  mounted() {
+  created() {
+    this.$store.commit('setLoading')
     if (this.uid) this.init()
   },
   methods: {
@@ -58,10 +57,12 @@ export default {
         .doc(this.$store.state.uid)
         .collection('events')
         .doc(this.eventId)
-      this.fetchEvent()
+      this.fetchEvent().then(() => {
+        this.$store.commit('setLoaded')
+      })
     },
     fetchEvent() {
-      this.eventDoc
+      return this.eventDoc
         .get()
         .then((doc) => {
           if (!doc.exists) throw new Error('Event not found')

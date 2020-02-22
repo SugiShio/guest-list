@@ -49,7 +49,8 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
+    this.$store.commit('setLoading')
     if (this.uid) this.init()
   },
   methods: {
@@ -84,7 +85,7 @@ export default {
       ]
     },
     fetchEvents() {
-      this.eventCollection
+      return this.eventCollection
         .orderBy('openAt', 'desc')
         .get()
         .then((querySnapShot) => {
@@ -111,7 +112,7 @@ export default {
         .collection('users')
         .doc(this.$store.state.uid)
         .collection('events')
-      this.fetchEvents()
+      this.fetchEvents().then(() => this.$store.commit('setLoaded'))
     }
   }
 }

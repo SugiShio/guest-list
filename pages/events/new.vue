@@ -35,6 +35,9 @@ export default {
       isWide: true
     }
   },
+  created() {
+    this.$store.commit('setLoaded')
+  },
   methods: {
     back() {
       history.back()

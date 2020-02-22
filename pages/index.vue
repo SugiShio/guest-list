@@ -3,6 +3,10 @@
 </template>
 
 <script>
-export default {}
+export default {
+  created() {
+    this.$store.commit('setLoaded')
+  }
+}
 </script>
 <style></style>

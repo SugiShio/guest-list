@@ -1,11 +1,16 @@
-import { firestore } from '~/plugins/firebase.js'
 export const state = () => ({
-  isLoaded: false,
+  isLoading: true,
   isSignin: false,
   uid: null
 })
 
 export const mutations = {
+  setLoading(state) {
+    state.isLoading = true
+  },
+  setLoaded(state) {
+    state.isLoading = false
+  },
   setUser(state, { uid }) {
     state.isSignin = true
     state.uid = uid

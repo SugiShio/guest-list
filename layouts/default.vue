@@ -1,26 +1,32 @@
 <template lang="pug">
 div
-  header.header
-    .header__inner
-      a.backButton(
-        v-if='hasHistory'
-        @click='back')
-        i.el-icon-arrow-left
-      g-menu(
-        v-if='isSignin'
-        @signout='signout')
-  div.wrapper
-    nuxt
+  loading(v-if='isLoading')
+  template(v-show='!isLoading')
+    header.header
+      .header__inner
+        a.backButton(
+          v-if='hasHistory'
+          @click='back')
+          i.el-icon-arrow-left
+        g-menu(
+          v-if='isSignin'
+          @signout='signout')
+    div.wrapper
+      nuxt
 </template>
 
 <script>
 import gMenu from '@/components/menu'
+import loading from '@/components/loading'
 import { auth } from '~/plugins/firebase.js'
 export default {
-  components: { gMenu },
+  components: { gMenu, loading },
   computed: {
     hasHistory() {
       return history.length > 1
+    },
+    isLoading() {
+      return this.$store.state.isLoading
     },
     isSignin() {
       return this.$store.state.isSignin
