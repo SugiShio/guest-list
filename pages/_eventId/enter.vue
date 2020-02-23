@@ -62,7 +62,7 @@ section
             type='weak'
             inline) Close
       section-content
-        p Have favurous time with us !
+        p {{ thankyouText }}
   loading(v-else)
 
 </template>
@@ -80,7 +80,14 @@ import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const guestTypes = Object.values(GUEST_TYPES)
 const instrumentsCanditate = Object.values(INSTRUMENTS)
+const THANKYOU_TEXTS = [
+  'Please enjoy yourselves!',
+  'Have fabulous time with us !',
+  'Have fun!',
+  'Have a great time!'
+]
 export default {
+  layout: 'public',
   components: {
     gButton,
     loading,
@@ -104,6 +111,7 @@ export default {
       guest: new Guest(),
       event: null,
       isPosting: false,
+      thankyouText: '',
       rules: validators,
       showModal: false
     }
@@ -155,6 +163,9 @@ export default {
         .doc()
         .set({ ...new Guest(guest) })
         .then((responce) => {
+          const randamIndex = Math.floor(Math.random() * THANKYOU_TEXTS.length)
+          this.thankyouText =
+            this.event.thankyouText || THANKYOU_TEXTS[randamIndex]
           this.guest = new Guest()
           this.isPosting = false
           this.showModal = true

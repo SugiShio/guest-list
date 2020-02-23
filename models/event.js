@@ -4,6 +4,7 @@ export class Event {
     this.name = params.name || 'Event'
     this.charge = params.charge || ''
     this.text = params.text || ''
+    this.thankyouText = params.thankyouText || ''
     this.createdAt = params.createdAt
     this.openAt = getTimestamp({ date: params.date, time: params.openAt })
     this.startAt = getTimestamp({ date: params.date, time: params.startAt })

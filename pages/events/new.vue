@@ -44,15 +44,7 @@ export default {
     create(event) {
       this.isPosting = true
       event = new Event({
-        name: event.name,
-        openAt: event.openAt,
-        startAt: event.startAt,
-        hosts: event.hosts,
-        hostsInstruments: event.hostsInstruments,
-        text: event.text,
-        charge: event.charge,
-        description: event.description,
-        date: event.date,
+        ...event,
         createdAt: new Date().getTime()
       })
       return firestore

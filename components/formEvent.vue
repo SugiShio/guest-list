@@ -64,6 +64,12 @@ el-form(
       v-else
       v-model='eventCopied.text'
       type='textarea')
+  el-form-item(label="Thank you text")
+    .showItem(v-if='!isEdit') {{ event.thankyouText }}
+    el-input(
+      v-else
+      v-model='eventCopied.thankyouText'
+      type='textarea')
   el-form-item(label="Description")
     .showItem(v-if='!isEdit') {{ event.description }}
     el-input(
