@@ -1,4 +1,5 @@
 {
+  "cancel": "Cancel",
   "delete": "Delete",
   "detail": "Detail",
   "events": "Events",
@@ -9,5 +10,15 @@
     "text1": "このサイトでは、ジャムセッションのお客さんのリストを簡単に作成・管理することができます。",
     "text2": "さあ、さっそく始めましょう！",
     "contact": "Contact"
+  },
+  "eventId": {
+    "list": {
+      "createANewSession": "Create a new session",
+      "enterPage": "Enter page",
+      "newSession": "New session",
+      "members": "Members",
+      "start": "Start!",
+      "songName": "What song will you play?"
+    }
   }
 }

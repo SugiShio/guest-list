@@ -8,11 +8,11 @@ section
         g-button(
           @click='goto("events-eventId")'
           size='mini'
-          inline) Detail
+          inline) {{ $t('detail') }}
         g-button(
           @click='goto("eventId-enter")'
           size='mini'
-          inline) Enter page
+          inline) {{ $t("eventId.list.enterPage") }}
     section-content
       ul.table
         li.table__item(v-for='block in guestsCategorised')
@@ -30,11 +30,11 @@ section
     .buttonNewSession(
       v-if='guestsSelected.length'
       @click='showModalNewSession = true')
-      |Create a new session
+      | {{ $t("eventId.list.createANewSession") }}
     modal(
       :isShow='showModalNewSession'
       @cancel='showModalNewSession = false')
-      section-head(title='New session')
+      section-head(:title='$t("eventId.list.newSession")')
         template(#functions)
           g-button(
             @click='showModalNewSession = false'
@@ -42,19 +42,19 @@ section
             inline) Close
       section-content
         el-form(label-position='top')
-          el-form-item(label='Members')
+          el-form-item(:label='$t("eventId.list.members")')
             ul
               li(v-for='guest in guestsSelected') {{ guest.guestText }}
-          el-form-item(label='What song will you play?')
+          el-form-item(:label='$t("eventId.list.songName")')
             el-input(v-model='song')
           section-button
             g-button(
               @click='showModalNewSession = false'
-              type='weak') Cancel
+              type='weak') {{ $t("cancel") }}
             g-button(
               :disabled='isPostingNewSession'
               @click='createSession'
-              type='primary') Start!
+              type='primary') {{ $t("eventId.list.start") }}
   loading(v-else)
 
 </template>
@@ -224,7 +224,7 @@ export default {
     updateGuestCount(guest) {
       return this.eventDoc
         .collection('guests')
-        .doc('guest.id')
+        .doc(guest.id)
         .update({ count: guest.count + 1 })
         .catch((error) => {
           throw error
