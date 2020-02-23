@@ -71,13 +71,24 @@ module.exports = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'nuxt-i18n'
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+
+  i18n: {
+    locales: [
+      { code: 'ja', iso: 'ja_JP', file: 'ja.json' },
+      { code: 'en', iso: 'en-US', file: 'en.json' }
+    ],
+    defaultLocale: 'ja',
+    lazy: true,
+    langDir: 'locales/'
+  },
   /*
    ** Build configuration
    */
