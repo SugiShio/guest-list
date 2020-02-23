@@ -1,4 +1,7 @@
 {
+  "delete": "Delete",
+  "detail": "Detail",
+  "events": "Events",
   "eventList": "Event list",
   "newEvent": "New event",
   "index": {

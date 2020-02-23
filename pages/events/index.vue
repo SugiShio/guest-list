@@ -1,14 +1,14 @@
 <template lang="pug">
 section
   template(v-if='events.length')
-    section-head(title='Events')
+    section-head(:title='$t("events")')
       template(#functions)
         g-button(
           @click='goto("events-new")'
           size='mini'
           inline)
             i.el-icon-plus
-            | &nbsp;New Event
+            | &nbsp;{{ $t('newEvent')}}
     list
       list-item(
         v-for='event in events'
@@ -58,7 +58,7 @@ export default {
     actions(event) {
       return [
         {
-          label: 'Detail',
+          label: this.$t('detail'),
           action: () => {
             this.$router.push({
               name: `events-eventId___${this.$i18n.locale}`,
@@ -67,7 +67,7 @@ export default {
           }
         },
         {
-          label: 'Delete',
+          label: this.$t('delete'),
           color: 'red',
           action: () => {
             if (!confirm(`Are you sure to delete an event "${event.name}" ?`))

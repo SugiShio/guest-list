@@ -1,4 +1,7 @@
 {
+  "delete": "削除",
+  "detail": "詳細",
+  "events": "イベント",
   "eventList": "イベント一覧",
   "newEvent": "イベント新規作成",
   "index": {
