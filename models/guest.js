@@ -1,4 +1,5 @@
 import { GUEST_TYPES, INSTRUMENTS } from '@/constants'
+import moment from 'moment'
 export class Guest {
   constructor(params = {}) {
     this.name = params.name || ''
@@ -14,6 +15,9 @@ export class Guest {
     this.createdAt = params.createdAt || new Date().getTime()
     if (params.id) this.id = params.id
   }
+  get createdAtText() {
+    return moment(this.createdAt).format('H:mm')
+  }
   get hasInstrumentOther() {
     return this.instruments.includes(INSTRUMENTS.other)
   }
@@ -21,11 +25,15 @@ export class Guest {
     return this.type === GUEST_TYPES.player
   }
   get guestText() {
-    const instrument =
-      this.instrumentMain === INSTRUMENTS.other
-        ? this.instrumentOther
-        : this.instrumentMain
-    return `${this.name} (${instrument})`
+    return `${this.name} (${this.part})`
+  }
+  get part() {
+    let part
+    if (this.type === GUEST_TYPES.listener) part = GUEST_TYPES.listener
+    else if (this.instrumentMain === INSTRUMENTS.other)
+      part = this.instrumentOther
+    else part = this.instrumentMain
+    return part
   }
 
   static validate = {

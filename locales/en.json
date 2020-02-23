@@ -28,7 +28,8 @@
     "newSession": "New session",
     "members": "Members",
     "start": "Start!",
-    "songName": "What song will you play?"
+    "songName": "What song will you play?",
+    "total": "Total: ##total##"
   },
   "eventId-enter": {
     "inputInstrument": "Input instrument(s)",

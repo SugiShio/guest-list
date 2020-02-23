@@ -13,6 +13,10 @@ section
           @click='goto("eventId-enter")'
           size='mini'
           inline) {{ $t("eventId-list.enterPage") }}
+        g-button(
+          @click='showModalList = true'
+          size='mini'
+          inline) {{ $t("guestList") }}
     section-content
       ul.table
         li.table__item(v-for='block in guestsCategorised')
@@ -33,14 +37,9 @@ section
       | {{ $t("eventId-list.createANewSession") }}
     modal(
       :isShow='showModalNewSession'
+      :title='$t("eventId-list.newSession")'
       @cancel='showModalNewSession = false')
-      section-head(:title='$t("eventId-list.newSession")')
-        template(#functions)
-          g-button(
-            @click='showModalNewSession = false'
-            type='weak'
-            inline) Close
-      section-content
+      template(#content)
         el-form(label-position='top')
           el-form-item(:label='$t("eventId-list.members")')
             ul
@@ -55,6 +54,17 @@ section
               :disabled='isPostingNewSession'
               @click='createSession'
               type='primary') {{ $t("eventId-list.start") }}
+    modal.listModal(
+      :isShow='showModalList'
+      :title='$t("guestList")'
+      @cancel='showModalList = false')
+      template(#content)
+        .listModal__total {{ totalText }}
+        ul.listModal__list
+          li.listModal__item(v-for='guest in guests')
+            .listModal__time {{ guest.createdAtText }}
+            .listModal__name {{ guest.name }}
+            .listModal__part {{ guest.part }}
   loading(v-else)
 
 </template>
@@ -87,6 +97,7 @@ export default {
       guestsSelected: [],
       isLoaded: false,
       isPostingNewSession: false,
+      showModalList: false,
       showModalNewSession: false,
       song: ''
     }
@@ -109,6 +120,12 @@ export default {
           })
         return { instrument, guests }
       })
+    },
+    totalText() {
+      return this.$t('eventId-list.total').replace(
+        '##total##',
+        this.guests.length
+      )
     },
     uid() {
       return this.$store.state.uid
@@ -154,6 +171,7 @@ export default {
     fetchGuests() {
       return this.eventDoc
         .collection('guests')
+        .orderBy('createdAt')
         .get()
         .then((querySnapShot) => {
           querySnapShot.forEach((doc) => {
@@ -277,6 +295,35 @@ export default {
   }
   & + & {
     margin-top: 5px;
+  }
+}
+.listModal {
+  &__list {
+    margin: 20px 0;
+  }
+  &__item {
+    display: flex;
+    margin: 0 -10px;
+    > div {
+      padding: 0 10px;
+    }
+  }
+  &__time {
+    flex-shrink: 0;
+    text-align: right;
+    width: 70px;
+  }
+  &__part {
+    flex-shrink: 0;
+    width: 100px;
+  }
+  &__name {
+    max-width: 300px;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
   }
 }
 .buttonNewSession {

@@ -28,7 +28,8 @@
     "newSession": "新規セッション",
     "members": "メンバー",
     "start": "スタート",
-    "songName": "演奏曲名"
+    "songName": "演奏曲名",
+    "total": "合計: ##total##名"
   },
   "eventId-enter": {
     "inputInstrument": "パート",

@@ -54,14 +54,9 @@ section
             type='primary') {{ $t("submit") }}
     modal(
       :isShow='showModal'
+      title='Thank you !'
       @cancel='showModal = false')
-      section-head(title='Thank you !')
-        template(#functions)
-          g-button(
-            @click='showModal = false'
-            type='weak'
-            inline) Close
-      section-content
+      template(#content)
         p {{ thankyouText }}
   loading(v-else)
 
