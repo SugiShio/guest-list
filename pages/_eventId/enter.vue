@@ -15,7 +15,7 @@ section
         el-form-item(prop='name')
           el-input(
             v-model='guest.name'
-            placeholder='Name')
+            :placeholder='$t("name")')
         el-form-item(prop='type')
           el-radio-group(v-model='guest.type')
             el-radio(
@@ -35,13 +35,13 @@ section
             prop='instrumentOther')
             el-input(
               v-model='guest.instrumentOther'
-              placeholder='Input instrument(s)')
+              :placeholder='$t("eventId-enter.inputInstrument")')
           el-form-item(
             v-if='guest.instruments.length > 1'
             prop='instrumentMain')
             el-select(
               v-model='guest.instrumentMain'
-              placeholder='Select your main instrument')
+              :placeholder='$t("eventId-enter.selectInstrument")')
               el-option(
                 v-for='instrument in instrumentsOrdered'
                 :label='instrument'
@@ -51,7 +51,7 @@ section
           g-button(
             @click='create'
             :disabled='isPosting'
-            type='primary') Submit
+            type='primary') {{ $t("submit") }}
     modal(
       :isShow='showModal'
       @cancel='showModal = false')
@@ -102,7 +102,9 @@ export default {
     keys.forEach((key) => {
       validators[key] = {
         validator: (rule, value, callback) => {
-          callback(Guest.validate[key](this.guest))
+          const error = Guest.validate[key](this.guest)
+          if (error) callback(this.$t(`errorMessages.${error}`))
+          else callback()
         },
         trigger: 'none'
       }

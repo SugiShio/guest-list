@@ -30,11 +30,11 @@ export class Guest {
 
   static validate = {
     name(params = {}) {
-      return params.name ? undefined : 'Name is required'
+      return params.name ? undefined : 'nameIsRequired'
     },
     instruments(params = {}) {
       if (params.type === GUEST_TYPES.player && !params.instruments.length)
-        return 'At least one instrument must be selected'
+        return 'atLeastOneInstrumentMustBeSelected'
     },
     instrumentOther(params = {}) {
       if (
@@ -42,7 +42,7 @@ export class Guest {
         params.instruments.includes(INSTRUMENTS.other) &&
         !params.instrumentOther
       )
-        return 'An instrument is required'
+        return 'anInstrumentIsRequired'
     },
     instrumentMain(params = {}) {
       if (
@@ -50,7 +50,7 @@ export class Guest {
         params.instruments.length > 1 &&
         !params.instrumentMain
       )
-        return 'Main instrument must be selected'
+        return 'mainInstrumentMustBeSelected'
     }
   }
 }

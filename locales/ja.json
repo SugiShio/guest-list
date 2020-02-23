@@ -25,6 +25,16 @@
     "start": "スタート",
     "songName": "演奏曲名"
   },
+  "eventId-enter": {
+    "inputInstrument": "パート",
+    "selectInstrument": "メインのパートを選択してください"
+  },
+  "errorMessages": {
+    "nameIsRequired": "名前は必須です",
+    "atLeastOneInstrumentMustBeSelected": "パートは1つ以上選択してください",
+    "anInstrumentIsRequired": "パートを入力してください",
+    "mainInstrumentMustBeSelected": "メインのパートを選択してください"
+  },
   "eventLabels": {
     "addHost": "ホストを追加する",
     "charge": "チャージ",

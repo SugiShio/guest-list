@@ -25,6 +25,16 @@
     "start": "Start!",
     "songName": "What song will you play?"
   },
+  "eventId-enter": {
+    "inputInstrument": "Input instrument(s)",
+    "selectInstrument": "Select your main instrument"
+  },
+  "errorMessages": {
+    "nameIsRequired": "Name is required",
+    "atLeastOneInstrumentMustBeSelected": "At least one instrument must be selected",
+    "anInstrumentIsRequired": "An instrument is required",
+    "mainInstrumentMustBeSelected": "Main instrument must be selected"
+  },
   "eventLabels": {
     "addHost": "Add host",
     "charge": "Charge",
