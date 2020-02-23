@@ -4,7 +4,7 @@ section
     section-head(title='Events')
       template(#functions)
         g-button(
-          @click='$router.push({name:"events-new"})'
+          @click='goto("events-new")'
           size='mini'
           inline)
             i.el-icon-plus
@@ -15,7 +15,7 @@ section
         :key='event.id'
         :actions='actions(event)')
         template(#body)
-          .eventItem(@click='goto(event)')
+          .eventItem(@click='goto("eventId-list", { eventId: event.id })')
             time.eventItem__child(
               :datetime='event.dateMeta')
               |{{ event.dateText }}
@@ -61,7 +61,7 @@ export default {
           label: 'Detail',
           action: () => {
             this.$router.push({
-              name: 'events-eventId',
+              name: `events-eventId___${this.$i18n.locale}`,
               params: { eventId: event.id }
             })
           }
@@ -101,13 +101,8 @@ export default {
           throw error
         })
     },
-    goto(item) {
-      this.$router.push({
-        name: 'eventId-list',
-        params: {
-          eventId: item.id
-        }
-      })
+    goto(routeName, params) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}`, params })
     },
     init() {
       this.eventCollection = firestore

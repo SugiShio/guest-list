@@ -6,11 +6,11 @@ section
       :sub-title='event.dateText')
       template(#functions)
         g-button(
-          @click='$router.push({name:"events-eventId"})'
+          @click='goto("events-eventId")'
           size='mini'
           inline) Detail
         g-button(
-          @click='$router.push({name:"eventId-enter"})'
+          @click='goto("eventId-enter")'
           size='mini'
           inline) Enter page
     section-content
@@ -163,6 +163,9 @@ export default {
         .catch((error) => {
           throw error
         })
+    },
+    goto(routeName) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}` })
     },
     updateGuestsSelected(guest) {
       const index = this.guestsSelected.findIndex(

@@ -33,7 +33,7 @@ export default {
           label: 'Events',
           action: () => {
             this.closeMenu()
-            router.push({ name: 'events' })
+            router.push({ name: `events___${this.$i18n.locale}` })
           }
         },
         {

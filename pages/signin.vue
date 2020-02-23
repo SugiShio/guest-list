@@ -20,14 +20,10 @@ export default {
     }
     auth.onAuthStateChanged((user) => {
       if (user) {
-        if (this.$route.name === 'signin') {
-          this.$router.push('/')
-        }
         this.$store.dispatch('updateUser', {
           uid: user.uid
         })
-      } else {
-        this.$router.push('/signin')
+        this.$router.push('/')
       }
     })
   },

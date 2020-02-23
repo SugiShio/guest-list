@@ -8,12 +8,10 @@ section-content
     .index__buttons
       template(v-if='isSignin')
         g-button(
-          @click='$router.push({name:"events-new"})'
+          @click='goto("events-new")'
           type='primary')
             i.el-icon-plus
-            | &nbsp;New Event
-        g-button(@click='$router.push({name:"events"})')
-          | Event list
+        g-button(@click='goto("events")')
       button-signin(v-else)
     .index__contact
       a(href='mailto:info@mimhhs.net') お問い合わせはこちら
@@ -29,6 +27,11 @@ export default {
   computed: {
     isSignin() {
       return this.$store.state.isSignin
+    }
+  },
+  methods: {
+    goto(routeName) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}` })
     }
   }
 }

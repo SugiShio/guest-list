@@ -6,7 +6,7 @@ section
       :title='event.name')
       template(#functions)
         g-button(
-          @click='$router.push({name:"eventId-list"})'
+          @click='goto("eventId-list")'
           size='mini'
           inline) Guest list
         g-button(
@@ -80,6 +80,9 @@ export default {
         .catch((error) => {
           throw error
         })
+    },
+    goto(routeName) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}` })
     },
     update(event) {
       this.isPosting = true
