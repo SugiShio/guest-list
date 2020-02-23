@@ -7,6 +7,8 @@
   "instrument": "instrument",
   "name": "Name",
   "newEvent": "New event",
+  "signinWithGoogle": "Sign in with Google",
+  "signout": "Sign out",
   "submit": "Submit",
   "index": {
     "hi": "Hi!",

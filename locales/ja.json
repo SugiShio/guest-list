@@ -7,6 +7,8 @@
   "instrument": "パート",
   "name": "名前",
   "newEvent": "イベント新規作成",
+  "signinWithGoogle": "Googleアカウントでサインイン",
+  "signout": "サインアウト",
   "submit": "送信",
   "index": {
     "hi": "こんにちは！",
