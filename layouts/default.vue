@@ -54,7 +54,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/stylesheets/utils';
-$width-wrapper: 1024px;
 .wrapper {
   max-width: $width-wrapper;
   margin: auto;

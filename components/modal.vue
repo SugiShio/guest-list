@@ -35,6 +35,7 @@ export default {
 
 .modal {
   width: calc(100% - 40px);
+  max-width: $width-wrapper;
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(#000, 0.1);
