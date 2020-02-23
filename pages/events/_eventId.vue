@@ -8,11 +8,11 @@ section
         g-button(
           @click='goto("eventId-list")'
           size='mini'
-          inline) Guest list
+          inline) {{ $t("guestList") }}
         g-button(
           @click='isEdit = true'
           size='mini'
-          inline) Edit
+          inline) {{ $t("edit") }}
 
     section-content
       form-event(
