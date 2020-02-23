@@ -19,7 +19,8 @@
     "contact": "お問い合わせはこちら"
   },
   "events-index": {
-    "confirmDeleting": "「##EVENTNAME##」を削除してもよろしいですか？"
+    "confirmDeleting": "「##EVENTNAME##」を削除してもよろしいですか？",
+    "deleteSucceededMessage": "「##EVENTNAME##」を削除しました"
   },
   "eventId-list": {
     "createANewSession": "セッション新規作成",

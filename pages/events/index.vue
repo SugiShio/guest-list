@@ -80,8 +80,14 @@ export default {
               .delete()
               .then(() => {
                 this.fetchEvents()
+                const deleteSucceededMessage = this.$t(
+                  'events-index.deleteSucceededMessage'
+                ).replace('##EVENTNAME##', event.name)
+
+                alert(deleteSucceededMessage)
               })
               .catch((error) => {
+                this.$store.commit('setError', { error })
                 throw error
               })
           }
