@@ -14,6 +14,9 @@
     "text2": "さあ、さっそく始めましょう！",
     "contact": "Contact"
   },
+  "events-index": {
+    "confirmDeleting": "Are you sure to delete an event \"##EVENTNAME##\" ?"
+  },
   "eventId": {
     "list": {
       "createANewSession": "Create a new session",

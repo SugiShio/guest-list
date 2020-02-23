@@ -70,8 +70,11 @@ export default {
           label: this.$t('delete'),
           color: 'red',
           action: () => {
-            if (!confirm(`Are you sure to delete an event "${event.name}" ?`))
-              return
+            const confirmText = this.$t('events-index.confirmDeleting').replace(
+              '##EVENTNAME##',
+              event.name
+            )
+            if (!confirm(confirmText)) return
             this.eventCollection
               .doc(event.id)
               .delete()
