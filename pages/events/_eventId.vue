@@ -18,6 +18,7 @@ section
       form-event(
         :is-edit='isEdit'
         :event='event'
+        :disabled='isPosting'
         @cancel='isEdit = false'
         @submit='update')
   loading(v-else)
@@ -38,7 +39,8 @@ export default {
     return {
       event: null,
       eventId: this.$route.params.eventId,
-      isEdit: false
+      isEdit: false,
+      isPosting: false
     }
   },
   computed: {
@@ -80,6 +82,7 @@ export default {
         })
     },
     update(event) {
+      this.isPosting = true
       event = new Event({
         name: event.name,
         openAt: event.openAt,
@@ -98,8 +101,11 @@ export default {
         .then((responce) => {
           this.fetchEvent()
           this.isEdit = false
+          this.isPosting = false
         })
         .catch((error) => {
+          this.isPosting = false
+          this.$store.commit('setError', { error })
           throw error
         })
     }

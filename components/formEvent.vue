@@ -76,6 +76,7 @@ el-form(
       type='weak') Cancel
     g-button(
       @click='emit'
+      :disabled='disabled'
       type='primary') Submit
 
 </template>
@@ -89,6 +90,7 @@ import { Event } from '@/models/event'
 export default {
   components: { gButton, sectionButton, sectionContent, sectionHead },
   props: {
+    disabled: { type: Boolean, default: false },
     event: { type: Event, required: true },
     isEdit: { type: Boolean, default: false }
   },

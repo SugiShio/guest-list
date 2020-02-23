@@ -32,7 +32,7 @@ section
       @click='showModalNewSession = true')
       |Create a new session
     modal(
-      v-if='showModalNewSession'
+      :isShow='showModalNewSession'
       @cancel='showModalNewSession = false')
       section-head(title='New session')
         template(#functions)
@@ -52,6 +52,7 @@ section
               @click='showModalNewSession = false'
               type='weak') Cancel
             g-button(
+              :disabled='isPostingNewSession'
               @click='createSession'
               type='primary') Start!
   loading(v-else)
@@ -85,6 +86,7 @@ export default {
       guests: [],
       guestsSelected: [],
       isLoaded: false,
+      isPostingNewSession: false,
       showModalNewSession: false,
       song: ''
     }
@@ -173,32 +175,54 @@ export default {
       }
     },
     createSession() {
+      this.isPostingNewSession = true
+      this.$store.commit('resetError')
       const history = {
         song: this.song,
         guests: this.guestsSelected.map((guest) => guest.name),
         createdAt: new Date().getTime()
       }
-      this.guestsSelected.forEach((guest) => {
-        this.eventDoc
-          .collection('guests')
-          .doc(guest.id)
-          .update({ count: guest.count + 1 })
-          .then((responce) => {})
-          .catch((error) => {
-            throw error
-          })
-      })
-      this.eventDoc
-        .collection('history')
-        .doc()
-        .set(history)
-        .then((responce) => {
-          this.showModalNewSession = false
+      this.createHistory(history)
+        .then(() => {
+          return Promise.all(
+            this.guestsSelected.map((guest) => {
+              this.updateGuestCount(guest).catch((error) => {
+                throw error
+              })
+            })
+          )
+        })
+        .then((values) => {
           this.guestsSelected = []
           this.song = ''
           this.guests = []
           this.fetchGuests()
         })
+        .then(() => {
+          this.isPostingNewSession = false
+          this.showModalNewSession = false
+        })
+        .catch((error) => {
+          this.isPostingNewSession = false
+          this.showModalNewSession = false
+          this.$store.commit('setError', { error }) // todo firebaseのエラーが拾えていないので直す
+          throw error
+        })
+    },
+    createHistory(history) {
+      return this.eventDoc
+        .collection('history')
+        .doc()
+        .set(history)
+        .catch((error) => {
+          throw error
+        })
+    },
+    updateGuestCount(guest) {
+      return this.eventDoc
+        .collection('guests')
+        .doc('guest.id')
+        .update({ count: guest.count + 1 })
         .catch((error) => {
           throw error
         })
@@ -236,7 +260,7 @@ export default {
   padding: 5px 10px;
   transition: background-color $transition-default;
   &:hover {
-    background-color: #eee;
+    background-color: darken(#fff, 3%);
   }
   &.isSub {
     opacity: 0.6;

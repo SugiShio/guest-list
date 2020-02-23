@@ -46,7 +46,7 @@ export default {
 @import '../assets/stylesheets/variables';
 .listItem {
   position: relative;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $color-lightgray;
 
   &__body {
     position: absolute;
@@ -63,7 +63,7 @@ export default {
     transition: transform 0.5s, background-color $transition-default;
     cursor: pointer;
     &:hover {
-      background-color: #eee;
+      background-color: darken(#fff, 1%);
     }
   }
 
@@ -78,7 +78,7 @@ export default {
     transition: background-color $transition-default;
     cursor: pointer;
     &:hover {
-      background-color: #eee;
+      background-color: $color-lightgray;
     }
     &.red {
       background-color: $color-accent;
@@ -100,7 +100,7 @@ export default {
   border-radius: 15px;
   transition: background-color $transition-default;
   &:hover {
-    background-color: #fff;
+    background-color: $color-lightgray;
   }
   > div {
     width: 3px;

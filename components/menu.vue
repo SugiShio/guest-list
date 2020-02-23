@@ -89,6 +89,7 @@ export default {
   }
 }
 .menuBg {
+  @extend %fade;
   position: fixed;
   top: 0;
   right: 0;
@@ -96,14 +97,6 @@ export default {
   left: 0;
   background-color: rgba(#fff, 0.7);
   z-index: $z-index-menu;
-  &.fade-enter-active,
-  &.fade-leave-active {
-    transition: opacity $transition-default;
-  }
-  &.fade-enter,
-  &.fade-leave-to {
-    opacity: 0;
-  }
 }
 .menuContent {
   position: absolute;
@@ -126,7 +119,7 @@ export default {
     cursor: pointer;
     transition: background-color $transition-default;
     &:hover {
-      background-color: #ddd;
+      background-color: $color-lightgray;
     }
   }
 }

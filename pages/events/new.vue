@@ -4,6 +4,7 @@ section
   section-content
     form-event(
       :is-edit='true'
+      :disabled='isPosting'
       :event='event'
       @cancel='back'
       @submit='create')
@@ -32,6 +33,7 @@ export default {
         openAt,
         startAt
       }),
+      isPosting: false,
       isWide: true
     }
   },
@@ -40,6 +42,7 @@ export default {
       history.back()
     },
     create(event) {
+      this.isPosting = true
       event = new Event({
         name: event.name,
         openAt: event.openAt,
@@ -62,6 +65,7 @@ export default {
           this.$router.push({ name: 'events' })
         })
         .catch((error) => {
+          this.isPosting = false
           this.$store.commit('setError', { error })
           throw error
         })

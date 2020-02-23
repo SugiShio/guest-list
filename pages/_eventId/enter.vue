@@ -50,7 +50,19 @@ section
         sectionButton
           g-button(
             @click='create'
+            :disabled='isPosting'
             type='primary') Submit
+    modal(
+      :isShow='showModal'
+      @cancel='showModal = false')
+      section-head(title='Thank you !')
+        template(#functions)
+          g-button(
+            @click='showModal = false'
+            type='weak'
+            inline) Close
+      section-content
+        p Have favurous time with us !
   loading(v-else)
 
 </template>
@@ -58,6 +70,7 @@ section
 <script>
 import gButton from '@/components/button'
 import loading from '@/components/loading'
+import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
@@ -68,7 +81,14 @@ import { firestore } from '~/plugins/firebase.js'
 const guestTypes = Object.values(GUEST_TYPES)
 const instrumentsCanditate = Object.values(INSTRUMENTS)
 export default {
-  components: { gButton, loading, sectionButton, sectionContent, sectionHead },
+  components: {
+    gButton,
+    loading,
+    modal,
+    sectionButton,
+    sectionContent,
+    sectionHead
+  },
   data() {
     const validators = {}
     const keys = ['name', 'instruments', 'instrumentMain', 'instrumentOther']
@@ -83,7 +103,9 @@ export default {
     return {
       guest: new Guest(),
       event: null,
-      rules: validators
+      isPosting: false,
+      rules: validators,
+      showModal: false
     }
   },
   computed: {
@@ -122,6 +144,7 @@ export default {
       })
       if (!isValid) return
 
+      this.isPosting = true
       const guest = {
         ...this.guest,
         instruments: this.instrumentsOrdered,
@@ -133,8 +156,14 @@ export default {
         .set({ ...new Guest(guest) })
         .then((responce) => {
           this.guest = new Guest()
+          this.isPosting = false
+          this.showModal = true
+          setTimeout(() => {
+            this.showModal = false
+          }, 10000)
         })
         .catch((error) => {
+          this.isPosting = false
           throw error
         })
     },

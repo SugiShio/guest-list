@@ -1,12 +1,17 @@
 <template lang="pug">
-.modalWrapper(@click='$emit("cancel")')
-  .modal(@click.stop)
-    slot
+div
+  transition(name='fade')
+    .modalWrapper(
+      @click='$emit("cancel")'
+      v-show='isShow')
+      .modal(@click.stop)
+        slot
 </template>
 
 <script>
 export default {
   props: {
+    isShow: { type: Boolean, default: false },
     title: { type: String, default: '' },
     subTitle: { type: String, default: '' }
   }
@@ -14,7 +19,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/stylesheets/utils';
 .modalWrapper {
+  @extend %fade;
   position: fixed;
   top: 0;
   right: 0;

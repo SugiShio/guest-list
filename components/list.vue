@@ -13,7 +13,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/stylesheets/utils';
 .list {
-  border-top: 1px solid #eee;
+  border-top: 1px solid $color-lightgray;
 }
 </style>
