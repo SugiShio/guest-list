@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-  section-head(title='New Event')
+  section-head(:title='$t("newEvent")')
   section-content
     form-event(
       :is-edit='true'

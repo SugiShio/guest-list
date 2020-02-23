@@ -2,12 +2,12 @@
 el-form(
   v-if='eventCopied'
   :label-position='labelPosition'
-  label-width='120px')
+  label-width='150px')
   el-form-item(
     v-if='isEdit'
-    label="Event's Name")
+    :label='$t("eventLabels.eventsName")')
     el-input(v-model='eventCopied.name')
-  el-form-item(label='Date')
+  el-form-item(:label='$t("eventLabels.date")')
     .showItem(v-if='!isEdit')
       div {{ event.dateText }}
       div {{ timeText }}
@@ -21,19 +21,19 @@ el-form(
       el-col(:span='sizeTime')
         el-time-picker(
           v-model='eventCopied.openAt'
-          placeholder='Open at'
+          :placeholder='$t("eventLabels.openAt")'
           :picker-options='{format: "HH:mm"}')
       el-col(:span='sizeTime')
         el-time-picker(
           v-model='eventCopied.startAt'
-          placeholder='Start at'
+          :placeholder='$t("eventLabels.startAt")'
           :picker-options='{format: "HH:mm"}')
-  el-form-item(label="Charge")
+  el-form-item(:label='$t("eventLabels.charge")')
     .showItem(v-if='!isEdit') {{ event.charge }}
     el-input(
       v-else
       v-model='eventCopied.charge')
-  el-form-item(label="Hosts")
+  el-form-item(:label='$t("eventLabels.hosts")')
     ul.showItem(v-if='!isEdit && hostTexts')
       li(v-for='host in hostTexts') {{ host }}
     template(v-else)
@@ -42,11 +42,11 @@ el-form(
           el-col(:span='16')
             el-input(
               v-model='eventCopied.hosts[index]'
-              placeholder='Name')
+              :placeholder='$t("name")')
           el-col(:span='8')
             el-input(
               v-model='eventCopied.hostsInstruments[index]'
-              placeholder='Instrument')
+              :placeholder='$t("instrument")')
         .arrayForm__button(v-if='event.hosts.length>1')
           i.el-icon-circle-close(@click='removeHost(index)')
       el-row
@@ -57,20 +57,20 @@ el-form(
             type='weak'
             inline)
             i.el-icon-plus
-            |Add host
-  el-form-item(label="Welcome text")
+            | &nbsp;{{ $t('eventLabels.addHost') }}
+  el-form-item(:label='$t("eventLabels.welcomeText")')
     .showItem(v-if='!isEdit') {{ event.text }}
     el-input(
       v-else
       v-model='eventCopied.text'
       type='textarea')
-  el-form-item(label="Thank you text")
+  el-form-item(:label='$t("eventLabels.thankyouText")')
     .showItem(v-if='!isEdit') {{ event.thankyouText }}
     el-input(
       v-else
       v-model='eventCopied.thankyouText'
       type='textarea')
-  el-form-item(label="Description")
+  el-form-item(:label='$t("eventLabels.description")')
     .showItem(v-if='!isEdit') {{ event.description }}
     el-input(
       v-else
@@ -79,11 +79,11 @@ el-form(
   section-button(v-if='isEdit')
     g-button(
       @click='$emit("cancel")'
-      type='weak') Cancel
+      type='weak') {{ $t("cancel") }}
     g-button(
       @click='emit'
       :disabled='disabled'
-      type='primary') Submit
+      type='primary') {{ $t("submit") }}
 
 </template>
 

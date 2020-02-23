@@ -4,7 +4,10 @@
   "detail": "Detail",
   "events": "Events",
   "eventList": "Event list",
+  "instrument": "instrument",
+  "name": "Name",
   "newEvent": "New event",
+  "submit": "Submit",
   "index": {
     "hi": "Hi!",
     "text1": "このサイトでは、ジャムセッションのお客さんのリストを簡単に作成・管理することができます。",
@@ -20,5 +23,17 @@
       "start": "Start!",
       "songName": "What song will you play?"
     }
+  },
+  "eventLabels": {
+    "addHost": "Add host",
+    "charge": "Charge",
+    "date": "Date",
+    "description": "Description",
+    "eventsName": "Event's name",
+    "hosts": "Hosts",
+    "openAt": "Open at",
+    "startAt": "Start at",
+    "welcomeText": "Welcome Text",
+    "thankyouText": "Thank you text"
   }
 }
