@@ -17,15 +17,13 @@
   "events-index": {
     "confirmDeleting": "「##EVENTNAME##」を削除してもよろしいですか？"
   },
-  "eventId": {
-    "list": {
-      "createANewSession": "セッション新規作成",
-      "enterPage": "エンターページ",
-      "newSession": "新規セッション",
-      "members": "メンバー",
-      "start": "スタート",
-      "songName": "演奏曲名"
-    }
+  "eventId-list": {
+    "createANewSession": "セッション新規作成",
+    "enterPage": "エンターページ",
+    "newSession": "新規セッション",
+    "members": "メンバー",
+    "start": "スタート",
+    "songName": "演奏曲名"
   },
   "eventLabels": {
     "addHost": "ホストを追加する",

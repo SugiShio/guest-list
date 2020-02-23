@@ -17,15 +17,13 @@
   "events-index": {
     "confirmDeleting": "Are you sure to delete an event \"##EVENTNAME##\" ?"
   },
-  "eventId": {
-    "list": {
-      "createANewSession": "Create a new session",
-      "enterPage": "Enter page",
-      "newSession": "New session",
-      "members": "Members",
-      "start": "Start!",
-      "songName": "What song will you play?"
-    }
+  "eventId-list": {
+    "createANewSession": "Create a new session",
+    "enterPage": "Enter page",
+    "newSession": "New session",
+    "members": "Members",
+    "start": "Start!",
+    "songName": "What song will you play?"
   },
   "eventLabels": {
     "addHost": "Add host",

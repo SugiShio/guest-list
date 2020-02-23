@@ -12,7 +12,7 @@ section
         g-button(
           @click='goto("eventId-enter")'
           size='mini'
-          inline) {{ $t("eventId.list.enterPage") }}
+          inline) {{ $t("eventId-list.enterPage") }}
     section-content
       ul.table
         li.table__item(v-for='block in guestsCategorised')
@@ -30,11 +30,11 @@ section
     .buttonNewSession(
       v-if='guestsSelected.length'
       @click='showModalNewSession = true')
-      | {{ $t("eventId.list.createANewSession") }}
+      | {{ $t("eventId-list.createANewSession") }}
     modal(
       :isShow='showModalNewSession'
       @cancel='showModalNewSession = false')
-      section-head(:title='$t("eventId.list.newSession")')
+      section-head(:title='$t("eventId-list.newSession")')
         template(#functions)
           g-button(
             @click='showModalNewSession = false'
@@ -42,10 +42,10 @@ section
             inline) Close
       section-content
         el-form(label-position='top')
-          el-form-item(:label='$t("eventId.list.members")')
+          el-form-item(:label='$t("eventId-list.members")')
             ul
               li(v-for='guest in guestsSelected') {{ guest.guestText }}
-          el-form-item(:label='$t("eventId.list.songName")')
+          el-form-item(:label='$t("eventId-list.songName")')
             el-input(v-model='song')
           section-button
             g-button(
@@ -54,7 +54,7 @@ section
             g-button(
               :disabled='isPostingNewSession'
               @click='createSession'
-              type='primary') {{ $t("eventId.list.start") }}
+              type='primary') {{ $t("eventId-list.start") }}
   loading(v-else)
 
 </template>
