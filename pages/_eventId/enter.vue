@@ -28,14 +28,14 @@ section
               v-model='guest.instruments')
               el-checkbox(
                 v-for='instrument in instrumentsCanditate'
-                :label='instrument'
-                :key='instrument')
-          el-form-item(
-            v-if='guest.hasInstrumentOther'
-            prop='instrumentOther')
-            el-input(
-              v-model='guest.instrumentOther'
-              :placeholder='$t("eventId-enter.inputInstrument")')
+                :label='instrument.value'
+                :key='instrument.value') {{ instrument.label }}
+              el-form-item.inputOther(prop='instrumentOther')
+                el-input(
+                  :disabled='!guest.hasInstrumentOther'
+                  prop='instrumentOther'
+                  v-model='guest.instrumentOther'
+                  :placeholder='$t("eventId-enter.inputInstrument")')
           el-form-item(
             v-if='guest.instruments.length > 1'
             prop='instrumentMain')
@@ -44,9 +44,9 @@ section
               :placeholder='$t("eventId-enter.selectInstrument")')
               el-option(
                 v-for='instrument in instrumentsOrdered'
-                :label='instrument'
-                :key='instrument'
-                :value='instrument')
+                :label='instrument.label'
+                :key='instrument.value'
+                :value='instrument.value')
         sectionButton
           g-button(
             @click='create'
@@ -69,7 +69,7 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
-import { GUEST_TYPES } from '@/constants'
+import { GUEST_TYPES, VALUE_OTHER } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
@@ -92,7 +92,7 @@ export default {
   },
   data() {
     const validators = {}
-    const keys = ['name', 'instruments', 'instrumentMain', 'instrumentOther']
+    const keys = Object.keys(Guest.validate)
     keys.forEach((key) => {
       validators[key] = {
         validator: (rule, value, callback) => {
@@ -117,11 +117,14 @@ export default {
       return guestTypes
     },
     instrumentsCanditate() {
-      return this.event.instruments
+      const instruments = this.event.instruments.map((instrument) => {
+        return { label: instrument, value: instrument }
+      })
+      return [...instruments, { label: this.$t('other'), value: VALUE_OTHER }]
     },
     instrumentsOrdered() {
       return this.instrumentsCanditate.filter((instrument) =>
-        this.guest.instruments.includes(instrument)
+        this.guest.instruments.includes(instrument.value)
       )
     },
     uid() {
@@ -147,11 +150,13 @@ export default {
         isValid = valid
       })
       if (!isValid) return
-
       this.isPosting = true
+      const instruments = this.instrumentsOrdered.map(
+        (instrument) => instrument.value
+      )
       const guest = {
         ...this.guest,
-        instruments: this.instrumentsOrdered,
+        instruments,
         createdAt: new Date().getTime()
       }
       this.eventDoc
@@ -196,4 +201,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.inputOther {
+  display: inline-block;
+  margin-left: 10px;
+}
+</style>

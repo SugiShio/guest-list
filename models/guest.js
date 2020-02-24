@@ -1,4 +1,4 @@
-import { GUEST_TYPES, INSTRUMENTS } from '@/constants'
+import { GUEST_TYPES, VALUE_OTHER } from '@/constants'
 import moment from 'moment'
 export class Guest {
   constructor(params = {}) {
@@ -9,7 +9,7 @@ export class Guest {
     this.instrumentMain = this.instruments.includes(params.instrumentMain)
       ? params.instrumentMain
       : this.instruments[0] || null
-    this.instrumentOther = this.instruments.includes(INSTRUMENTS.other)
+    this.instrumentOther = this.instruments.includes(VALUE_OTHER)
       ? params.instrumentOther
       : null
     this.createdAt = params.createdAt || new Date().getTime()
@@ -19,7 +19,7 @@ export class Guest {
     return moment(this.createdAt).format('H:mm')
   }
   get hasInstrumentOther() {
-    return this.instruments.includes(INSTRUMENTS.other)
+    return this.instruments.includes(VALUE_OTHER)
   }
   get isPlayer() {
     return this.type === GUEST_TYPES.player
@@ -30,8 +30,7 @@ export class Guest {
   get part() {
     let part
     if (this.type === GUEST_TYPES.listener) part = GUEST_TYPES.listener
-    else if (this.instrumentMain === INSTRUMENTS.other)
-      part = this.instrumentOther
+    else if (this.instrumentMain === VALUE_OTHER) part = this.instrumentOther
     else part = this.instrumentMain
     return part
   }
@@ -47,7 +46,7 @@ export class Guest {
     instrumentOther(params = {}) {
       if (
         params.instruments &&
-        params.instruments.includes(INSTRUMENTS.other) &&
+        params.instruments.includes(VALUE_OTHER) &&
         !params.instrumentOther
       )
         return 'anInstrumentIsRequired'

@@ -1,4 +1,3 @@
-import { INSTRUMENTS } from '@/constants'
 import moment from 'moment'
 export class Event {
   constructor(params = {}) {
@@ -11,7 +10,7 @@ export class Event {
     this.hostsInstruments = (params.hostsInstruments || []).filter(
       (_, index) => params.hosts[index]
     )
-    this.instruments = (params.instruments || [INSTRUMENTS.other])
+    this.instruments = (params.instruments || [])
       .filter((instrument) => instrument)
       .filter((item, index, items) => items.indexOf(item) === index)
     this.text = params.text || ''

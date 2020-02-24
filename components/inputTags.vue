@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { INSTRUMENTS } from '@/constants'
+import { VALUE_OTHER } from '@/constants'
 export default {
   props: {
     items: { type: Array, default: () => [] },
@@ -53,8 +53,8 @@ export default {
     },
     handleInputConfirm() {
       const inputValue = this.inputValue
-      const index = this.items.includes(INSTRUMENTS.other)
-        ? this.items.indexOf(INSTRUMENTS.other)
+      const index = this.items.includes(VALUE_OTHER)
+        ? this.items.indexOf(VALUE_OTHER)
         : this.items.length
       if (inputValue) {
         this.items.splice(index, 0, inputValue)

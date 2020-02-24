@@ -20,7 +20,7 @@ section
     section-content
       ul.table
         li.table__item(v-for='block in guestsCategorised')
-          h1.table__title {{ block.instrument }}
+          h1.table__title {{ block.label }}
           ul
             li.guest(
               v-for='guest in block.guests'
@@ -28,7 +28,7 @@ section
               @click='updateGuestsSelected(guest.item)')
               div
                 | {{ guest.item.name }}
-                template(v-if='block.instrument === "Other"')
+                template(v-if='block.value === valueOther')
                   | &nbsp;({{ guest.item.instrumentOther }})
               div(v-if='guest.item.count') {{ guest.item.count }}
     .buttonNewSession(
@@ -76,6 +76,7 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
+import { VALUE_OTHER } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
@@ -102,22 +103,25 @@ export default {
   },
   computed: {
     guestsCategorised() {
-      const instruments = this.event.instruments
+      const instruments = this.event.instruments.map((instrument) => {
+        return { label: instrument, value: instrument }
+      })
+      instruments.push({ label: this.$t('other'), value: VALUE_OTHER })
       return instruments.map((instrument) => {
         const guests = this.guests
-          .filter((guest) => guest.instruments.includes(instrument))
+          .filter((guest) => guest.instruments.includes(instrument.value))
           .map((guest) => {
             const isSelected = !!this.guestsSelected.find(
               (guestSelected) => guestSelected.id === guest.id
             )
-            const isSub = guest.instrumentMain !== instrument
+            const isSub = guest.instrumentMain !== instrument.value
             return {
               item: guest,
               isSub,
               isSelected
             }
           })
-        return { instrument, guests }
+        return { ...instrument, guests }
       })
     },
     totalText() {
@@ -128,6 +132,9 @@ export default {
     },
     uid() {
       return this.$store.state.uid
+    },
+    valueOther() {
+      return VALUE_OTHER
     }
   },
   watch: {
