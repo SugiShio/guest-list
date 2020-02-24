@@ -69,12 +69,11 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
-import { GUEST_TYPES, INSTRUMENTS } from '@/constants'
+import { GUEST_TYPES } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const guestTypes = Object.values(GUEST_TYPES)
-const instrumentsCanditate = Object.values(INSTRUMENTS)
 const THANKYOU_TEXTS = [
   'Please enjoy yourselves!',
   'Have fabulous time with us !',
@@ -118,10 +117,10 @@ export default {
       return guestTypes
     },
     instrumentsCanditate() {
-      return instrumentsCanditate
+      return this.event.instruments
     },
     instrumentsOrdered() {
-      return instrumentsCanditate.filter((instrument) =>
+      return this.instrumentsCanditate.filter((instrument) =>
         this.guest.instruments.includes(instrument)
       )
     },

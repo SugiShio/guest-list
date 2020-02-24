@@ -43,11 +43,13 @@
   },
   "eventLabels": {
     "addHost": "Add host",
+    "addInstruments": "Add instrument",
     "charge": "Charge",
     "date": "Date",
     "description": "Description",
     "eventsName": "Event's name",
     "hosts": "Hosts",
+    "instruments": "Instruments",
     "openAt": "Open at",
     "startAt": "Start at",
     "welcomeText": "Welcome Text",

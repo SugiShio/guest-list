@@ -42,12 +42,14 @@
     "mainInstrumentMustBeSelected": "メインのパートを選択してください"
   },
   "eventLabels": {
-    "addHost": "ホストを追加する",
+    "addHost": "ホストを追加",
+    "addInstruments": "パートを追加",
     "charge": "チャージ",
     "date": "日時",
     "description": "説明",
     "eventsName": "イベント名",
     "hosts": "ホスト",
+    "instruments": "パート",
     "openAt": "オープン時間",
     "startAt": "スタート時間",
     "welcomeText": "ウェルカムテキスト",

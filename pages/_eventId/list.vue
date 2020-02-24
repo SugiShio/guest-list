@@ -76,11 +76,9 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
-import { INSTRUMENTS } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
-const instruments = Object.values(INSTRUMENTS)
 export default {
   components: {
     gButton,
@@ -104,6 +102,7 @@ export default {
   },
   computed: {
     guestsCategorised() {
+      const instruments = this.event.instruments
       return instruments.map((instrument) => {
         const guests = this.guests
           .filter((guest) => guest.instruments.includes(instrument))

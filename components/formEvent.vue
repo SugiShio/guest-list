@@ -58,6 +58,12 @@ el-form(
             inline)
             i.el-icon-plus
             | &nbsp;{{ $t('eventLabels.addHost') }}
+  el-form-item(:label='$t("eventLabels.instruments")')
+    .showItem(v-if='!isEdit') {{ event.instruments.join(', ') }}
+    template(v-else)
+      input-tags(
+        :items='eventCopied.instruments'
+        :button-text='$t("eventLabels.addInstruments")')
   el-form-item(:label='$t("eventLabels.welcomeText")')
     .showItem(v-if='!isEdit') {{ event.text }}
     el-input(
@@ -89,12 +95,19 @@ el-form(
 
 <script>
 import gButton from '@/components/button'
+import inputTags from '@/components/inputTags'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
 import { Event } from '@/models/event'
 export default {
-  components: { gButton, sectionButton, sectionContent, sectionHead },
+  components: {
+    gButton,
+    inputTags,
+    sectionButton,
+    sectionContent,
+    sectionHead
+  },
   props: {
     disabled: { type: Boolean, default: false },
     event: { type: Event, required: true },
