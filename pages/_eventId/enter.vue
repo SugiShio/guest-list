@@ -21,7 +21,7 @@ section
             el-radio(
               v-for='type in guestTypes'
               :label='type'
-              :key='type')
+              :key='type') {{ $t(type)}}
         template(v-if='guest.isPlayer')
           el-form-item(prop='instruments')
             el-checkbox-group(

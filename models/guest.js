@@ -29,7 +29,7 @@ export class Guest {
   }
   get part() {
     let part
-    if (this.type === GUEST_TYPES.listener) part = GUEST_TYPES.listener
+    if (this.type === GUEST_TYPES.listener) part = 'Listener'
     else if (this.instrumentMain === VALUE_OTHER) part = this.instrumentOther
     else part = this.instrumentMain
     return part

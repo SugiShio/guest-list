@@ -1,2 +1,2 @@
-export const GUEST_TYPES = { player: 'Player', listener: 'Listener' }
+export const GUEST_TYPES = { player: 'player', listener: 'listener' }
 export const VALUE_OTHER = 'other'
