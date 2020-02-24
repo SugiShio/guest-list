@@ -2,11 +2,12 @@
 .inputTags
   el-tag(
     v-for='item in items'
-    :closable='closable'
     :disable-transitions="false"
     :key='item'
+    closable
     type='info'
     @close="handleClose(item)") {{ item }}
+  el-tag(type='info') {{ $t('other') }}
   el-input.inputTags__input(
     v-if='inputVisible'
     v-model='inputValue'
@@ -34,11 +35,6 @@ export default {
     return {
       inputValue: '',
       inputVisible: false
-    }
-  },
-  computed: {
-    closable() {
-      return this.items.length > 1
     }
   },
   methods: {

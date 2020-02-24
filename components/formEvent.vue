@@ -59,7 +59,7 @@ el-form(
             i.el-icon-plus
             | &nbsp;{{ $t('eventLabels.addHost') }}
   el-form-item(:label='$t("eventLabels.instruments")')
-    .showItem(v-if='!isEdit') {{ event.instruments.join(', ') }}
+    .showItem(v-if='!isEdit') {{ instrumentsText }}
     template(v-else)
       input-tags(
         :items='eventCopied.instruments'
@@ -125,6 +125,9 @@ export default {
       return this.event.hosts
         .filter((host) => host)
         .map((host, index) => `${host} (${this.event.hostsInstruments[index]})`)
+    },
+    instrumentsText() {
+      return [...this.event.instruments, this.$t('other')].join(', ')
     },
     labelPosition() {
       return this.isWide ? 'left' : 'top'
