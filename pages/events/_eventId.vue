@@ -6,13 +6,13 @@ section
       :title='event.name')
       template(#functions)
         g-button(
-          @click='$router.push({name:"eventId-list"})'
+          @click='goto("eventId-list")'
           size='mini'
-          inline) Guest list
+          inline) {{ $t("guestList") }}
         g-button(
           @click='isEdit = true'
           size='mini'
-          inline) Edit
+          inline) {{ $t("edit") }}
 
     section-content
       form-event(
@@ -80,6 +80,9 @@ export default {
         .catch((error) => {
           throw error
         })
+    },
+    goto(routeName) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}` })
     },
     update(event) {
       this.isPosting = true

@@ -1,0 +1,67 @@
+{
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "detail": "Detail",
+  "edit": "Edit",
+  "events": "Events",
+  "eventList": "Event list",
+  "guestList": "Guest list",
+  "instrument": "instrument",
+  "listener": "Listener",
+  "name": "Name",
+  "newEvent": "New event",
+  "other": "Other",
+  "player": "Player",
+  "signinWithGoogle": "Sign in with Google",
+  "signout": "Sign out",
+  "submit": "Submit",
+  "index": {
+    "hi": "Hi!",
+    "text1": "このサイトでは、ジャムセッションのお客さんのリストを簡単に作成・管理することができます。",
+    "text2": "さあ、さっそく始めましょう！",
+    "contact": "Contact"
+  },
+  "events-index": {
+    "confirmDeleting": "Are you sure to delete an event \"##EVENTNAME##\" ?",
+    "deleteSucceededMessage": "Successfully deleted \"##EVENTNAME##\""
+  },
+  "eventId-list": {
+    "createANewSession": "Create a new session",
+    "enterPage": "Enter page",
+    "newSession": "New session",
+    "members": "Members",
+    "start": "Start!",
+    "songName": "What song will you play?",
+    "total": "Total: ##total##"
+  },
+  "eventId-enter": {
+    "inputInstrument": "Input instrument(s)",
+    "selectInstrument": "Select your main instrument",
+    "thankyouTexts": [
+      "Please enjoy yourselves!",
+      "Have fabulous time with us !",
+      "Have fun!",
+      "Have a great time!"
+    ]
+  },
+  "errorMessages": {
+    "nameIsRequired": "Name is required",
+    "atLeastOneInstrumentMustBeSelected": "At least one instrument must be selected",
+    "anInstrumentIsRequired": "An instrument is required",
+    "mainInstrumentMustBeSelected": "Main instrument must be selected"
+  },
+  "eventLabels": {
+    "addHost": "Add host",
+    "addInstruments": "Add instrument",
+    "charge": "Charge",
+    "date": "Date",
+    "description": "Description",
+    "eventsName": "Event's name",
+    "hosts": "Hosts",
+    "instruments": "Instruments",
+    "openAt": "Open at",
+    "startAt": "Start at",
+    "welcomeText": "Welcome Text",
+    "thankyouText": "Thank you text"
+  }
+}

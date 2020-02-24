@@ -1,0 +1,62 @@
+{
+  "cancel": "キャンセル",
+  "delete": "削除",
+  "detail": "詳細",
+  "edit": "編集",
+  "events": "イベント",
+  "eventList": "イベント一覧",
+  "guestList": "ゲスト一覧",
+  "instrument": "パート",
+  "listener": "リスナー",
+  "name": "名前",
+  "newEvent": "イベント新規作成",
+  "other": "その他",
+  "player": "プレイヤー",
+  "signinWithGoogle": "Googleアカウントでサインイン",
+  "signout": "サインアウト",
+  "submit": "送信",
+  "index": {
+    "hi": "こんにちは！",
+    "text1": "このサイトでは、ジャムセッションのお客さんのリストを簡単に作成・管理することができます。",
+    "text2": "さあ、さっそく始めましょう！",
+    "contact": "お問い合わせはこちら"
+  },
+  "events-index": {
+    "confirmDeleting": "「##EVENTNAME##」を削除してもよろしいですか？",
+    "deleteSucceededMessage": "「##EVENTNAME##」を削除しました"
+  },
+  "eventId-list": {
+    "createANewSession": "セッション新規作成",
+    "enterPage": "エンターページ",
+    "newSession": "新規セッション",
+    "members": "メンバー",
+    "start": "スタート",
+    "songName": "演奏曲名",
+    "total": "合計: ##total##名"
+  },
+  "eventId-enter": {
+    "inputInstrument": "パート",
+    "selectInstrument": "メインのパートを選択してください",
+    "thankyouTexts": ["一緒に楽しみましょう！", "良い時を！"]
+  },
+  "errorMessages": {
+    "nameIsRequired": "名前は必須です",
+    "atLeastOneInstrumentMustBeSelected": "パートは1つ以上選択してください",
+    "anInstrumentIsRequired": "パートを入力してください",
+    "mainInstrumentMustBeSelected": "メインのパートを選択してください"
+  },
+  "eventLabels": {
+    "addHost": "ホストを追加",
+    "addInstruments": "パートを追加",
+    "charge": "チャージ",
+    "date": "日時",
+    "description": "説明",
+    "eventsName": "イベント名",
+    "hosts": "ホスト",
+    "instruments": "パート",
+    "openAt": "オープン時間",
+    "startAt": "スタート時間",
+    "welcomeText": "ウェルカムテキスト",
+    "thankyouText": "サンキューテキスト"
+  }
+}

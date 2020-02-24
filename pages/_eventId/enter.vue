@@ -15,53 +15,48 @@ section
         el-form-item(prop='name')
           el-input(
             v-model='guest.name'
-            placeholder='Name')
+            :placeholder='$t("name")')
         el-form-item(prop='type')
           el-radio-group(v-model='guest.type')
             el-radio(
               v-for='type in guestTypes'
               :label='type'
-              :key='type')
+              :key='type') {{ $t(type)}}
         template(v-if='guest.isPlayer')
           el-form-item(prop='instruments')
             el-checkbox-group(
               v-model='guest.instruments')
               el-checkbox(
                 v-for='instrument in instrumentsCanditate'
-                :label='instrument'
-                :key='instrument')
-          el-form-item(
-            v-if='guest.hasInstrumentOther'
-            prop='instrumentOther')
-            el-input(
-              v-model='guest.instrumentOther'
-              placeholder='Input instrument(s)')
+                :label='instrument.value'
+                :key='instrument.value') {{ instrument.label }}
+              el-form-item.inputOther(prop='instrumentOther')
+                el-input(
+                  :disabled='!guest.hasInstrumentOther'
+                  prop='instrumentOther'
+                  v-model='guest.instrumentOther'
+                  :placeholder='$t("eventId-enter.inputInstrument")')
           el-form-item(
             v-if='guest.instruments.length > 1'
             prop='instrumentMain')
             el-select(
               v-model='guest.instrumentMain'
-              placeholder='Select your main instrument')
+              :placeholder='$t("eventId-enter.selectInstrument")')
               el-option(
                 v-for='instrument in instrumentsOrdered'
-                :label='instrument'
-                :key='instrument'
-                :value='instrument')
+                :label='instrument.label'
+                :key='instrument.value'
+                :value='instrument.value')
         sectionButton
           g-button(
             @click='create'
             :disabled='isPosting'
-            type='primary') Submit
+            type='primary') {{ $t("submit") }}
     modal(
       :isShow='showModal'
+      title='Thank you !'
       @cancel='showModal = false')
-      section-head(title='Thank you !')
-        template(#functions)
-          g-button(
-            @click='showModal = false'
-            type='weak'
-            inline) Close
-      section-content
+      template(#content)
         p {{ thankyouText }}
   loading(v-else)
 
@@ -74,18 +69,11 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
-import { GUEST_TYPES, INSTRUMENTS } from '@/constants'
+import { GUEST_TYPES, VALUE_OTHER } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const guestTypes = Object.values(GUEST_TYPES)
-const instrumentsCanditate = Object.values(INSTRUMENTS)
-const THANKYOU_TEXTS = [
-  'Please enjoy yourselves!',
-  'Have fabulous time with us !',
-  'Have fun!',
-  'Have a great time!'
-]
 export default {
   layout: 'public',
   components: {
@@ -98,11 +86,13 @@ export default {
   },
   data() {
     const validators = {}
-    const keys = ['name', 'instruments', 'instrumentMain', 'instrumentOther']
+    const keys = Object.keys(Guest.validate)
     keys.forEach((key) => {
       validators[key] = {
         validator: (rule, value, callback) => {
-          callback(Guest.validate[key](this.guest))
+          const error = Guest.validate[key](this.guest)
+          if (error) callback(this.$t(`errorMessages.${error}`))
+          else callback()
         },
         trigger: 'none'
       }
@@ -121,12 +111,18 @@ export default {
       return guestTypes
     },
     instrumentsCanditate() {
-      return instrumentsCanditate
+      const instruments = this.event.instruments.map((instrument) => {
+        return { label: instrument, value: instrument }
+      })
+      return [...instruments, { label: this.$t('other'), value: VALUE_OTHER }]
     },
     instrumentsOrdered() {
-      return instrumentsCanditate.filter((instrument) =>
-        this.guest.instruments.includes(instrument)
+      return this.instrumentsCanditate.filter((instrument) =>
+        this.guest.instruments.includes(instrument.value)
       )
+    },
+    thankyouTexts() {
+      return this.$t('eventId-enter.thankyouTexts')
     },
     uid() {
       return this.$store.state.uid
@@ -151,11 +147,13 @@ export default {
         isValid = valid
       })
       if (!isValid) return
-
       this.isPosting = true
+      const instruments = this.instrumentsOrdered.map(
+        (instrument) => instrument.value
+      )
       const guest = {
         ...this.guest,
-        instruments: this.instrumentsOrdered,
+        instruments,
         createdAt: new Date().getTime()
       }
       this.eventDoc
@@ -163,9 +161,11 @@ export default {
         .doc()
         .set({ ...new Guest(guest) })
         .then((responce) => {
-          const randamIndex = Math.floor(Math.random() * THANKYOU_TEXTS.length)
+          const randamIndex = Math.floor(
+            Math.random() * this.thankyouTexts.length
+          )
           this.thankyouText =
-            this.event.thankyouText || THANKYOU_TEXTS[randamIndex]
+            this.event.thankyouText || this.thankyouTexts[randamIndex]
           this.guest = new Guest()
           this.isPosting = false
           this.showModal = true
@@ -200,4 +200,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.inputOther {
+  display: inline-block;
+  margin-left: 10px;
+}
+</style>

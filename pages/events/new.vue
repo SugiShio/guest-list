@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-  section-head(title='New Event')
+  section-head(:title='$t("newEvent")')
   section-content
     form-event(
       :is-edit='true'
@@ -54,7 +54,7 @@ export default {
         .doc()
         .set({ ...event })
         .then((responce) => {
-          this.$router.push({ name: 'events' })
+          this.$router.push({ name: `events___${this.$i18n.locale}` })
         })
         .catch((error) => {
           this.isPosting = false

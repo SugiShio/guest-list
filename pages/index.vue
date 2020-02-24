@@ -2,21 +2,21 @@
 section-content
   .index
     img.index__image(src='/logo.png')
-    p.index__title こんにちは！
-    p.index__text このサイトでは、ジャムセッションのお客さんのリストを簡単に作成・管理することができます。
-    p.index__text さあ、さっそく始めましょう！
+    p.index__title {{ $t('index.hi') }}
+    p.index__text {{ $t('index.text1')}}
+    p.index__text {{ $t('index.text2')}}
     .index__buttons
       template(v-if='isSignin')
         g-button(
-          @click='$router.push({name:"events-new"})'
+          @click='goto("events-new")'
           type='primary')
             i.el-icon-plus
-            | &nbsp;New Event
-        g-button(@click='$router.push({name:"events"})')
-          | Event list
+            | &nbsp;{{ $t('newEvent') }}
+        g-button(@click='goto("events")')
+          | {{ $t('eventList') }}
       button-signin(v-else)
     .index__contact
-      a(href='mailto:info@mimhhs.net') お問い合わせはこちら
+      a(href='mailto:info@mimhhs.net') {{ $t('index.contact') }}
 </template>
 
 <script>
@@ -29,6 +29,11 @@ export default {
   computed: {
     isSignin() {
       return this.$store.state.isSignin
+    }
+  },
+  methods: {
+    goto(routeName) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}` })
     }
   }
 }

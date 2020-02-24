@@ -30,14 +30,14 @@ export default {
       const router = this.$router
       return [
         {
-          label: 'Events',
+          label: this.$t('eventList'),
           action: () => {
             this.closeMenu()
-            router.push({ name: 'events' })
+            router.push({ name: `events___${this.$i18n.locale}` })
           }
         },
         {
-          label: 'Sign out',
+          label: this.$t('signout'),
           action: () => {
             this.closeMenu()
             this.$emit('signout')

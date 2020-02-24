@@ -6,17 +6,21 @@ section
       :sub-title='event.dateText')
       template(#functions)
         g-button(
-          @click='$router.push({name:"events-eventId"})'
+          @click='goto("events-eventId")'
           size='mini'
-          inline) Detail
+          inline) {{ $t('detail') }}
         g-button(
-          @click='$router.push({name:"eventId-enter"})'
+          @click='goto("eventId-enter")'
           size='mini'
-          inline) Enter page
+          inline) {{ $t("eventId-list.enterPage") }}
+        g-button(
+          @click='showModalList = true'
+          size='mini'
+          inline) {{ $t("guestList") }}
     section-content
       ul.table
         li.table__item(v-for='block in guestsCategorised')
-          h1.table__title {{ block.instrument }}
+          h1.table__title {{ block.label }}
           ul
             li.guest(
               v-for='guest in block.guests'
@@ -24,37 +28,43 @@ section
               @click='updateGuestsSelected(guest.item)')
               div
                 | {{ guest.item.name }}
-                template(v-if='block.instrument === "Other"')
+                template(v-if='block.value === valueOther')
                   | &nbsp;({{ guest.item.instrumentOther }})
               div(v-if='guest.item.count') {{ guest.item.count }}
     .buttonNewSession(
       v-if='guestsSelected.length'
       @click='showModalNewSession = true')
-      |Create a new session
+      | {{ $t("eventId-list.createANewSession") }}
     modal(
       :isShow='showModalNewSession'
+      :title='$t("eventId-list.newSession")'
       @cancel='showModalNewSession = false')
-      section-head(title='New session')
-        template(#functions)
-          g-button(
-            @click='showModalNewSession = false'
-            type='weak'
-            inline) Close
-      section-content
+      template(#content)
         el-form(label-position='top')
-          el-form-item(label='Members')
+          el-form-item(:label='$t("eventId-list.members")')
             ul
               li(v-for='guest in guestsSelected') {{ guest.guestText }}
-          el-form-item(label='What song will you play?')
+          el-form-item(:label='$t("eventId-list.songName")')
             el-input(v-model='song')
           section-button
             g-button(
               @click='showModalNewSession = false'
-              type='weak') Cancel
+              type='weak') {{ $t("cancel") }}
             g-button(
               :disabled='isPostingNewSession'
               @click='createSession'
-              type='primary') Start!
+              type='primary') {{ $t("eventId-list.start") }}
+    modal.listModal(
+      :isShow='showModalList'
+      :title='$t("guestList")'
+      @cancel='showModalList = false')
+      template(#content)
+        .listModal__total {{ totalText }}
+        ul.listModal__list
+          li.listModal__item(v-for='guest in guests')
+            .listModal__time {{ guest.createdAtText }}
+            .listModal__name {{ guest.name }}
+            .listModal__part {{ guest.part }}
   loading(v-else)
 
 </template>
@@ -66,11 +76,10 @@ import modal from '@/components/modal'
 import sectionButton from '@/components/sectionButton'
 import sectionContent from '@/components/sectionContent'
 import sectionHead from '@/components/sectionHead'
-import { INSTRUMENTS } from '@/constants'
+import { VALUE_OTHER } from '@/constants'
 import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
-const instruments = Object.values(INSTRUMENTS)
 export default {
   components: {
     gButton,
@@ -87,31 +96,45 @@ export default {
       guestsSelected: [],
       isLoaded: false,
       isPostingNewSession: false,
+      showModalList: false,
       showModalNewSession: false,
       song: ''
     }
   },
   computed: {
     guestsCategorised() {
+      const instruments = this.event.instruments.map((instrument) => {
+        return { label: instrument, value: instrument }
+      })
+      instruments.push({ label: this.$t('other'), value: VALUE_OTHER })
       return instruments.map((instrument) => {
         const guests = this.guests
-          .filter((guest) => guest.instruments.includes(instrument))
+          .filter((guest) => guest.instruments.includes(instrument.value))
           .map((guest) => {
             const isSelected = !!this.guestsSelected.find(
               (guestSelected) => guestSelected.id === guest.id
             )
-            const isSub = guest.instrumentMain !== instrument
+            const isSub = guest.instrumentMain !== instrument.value
             return {
               item: guest,
               isSub,
               isSelected
             }
           })
-        return { instrument, guests }
+        return { ...instrument, guests }
       })
+    },
+    totalText() {
+      return this.$t('eventId-list.total').replace(
+        '##total##',
+        this.guests.length
+      )
     },
     uid() {
       return this.$store.state.uid
+    },
+    valueOther() {
+      return VALUE_OTHER
     }
   },
   watch: {
@@ -154,6 +177,7 @@ export default {
     fetchGuests() {
       return this.eventDoc
         .collection('guests')
+        .orderBy('createdAt')
         .get()
         .then((querySnapShot) => {
           querySnapShot.forEach((doc) => {
@@ -163,6 +187,9 @@ export default {
         .catch((error) => {
           throw error
         })
+    },
+    goto(routeName) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}` })
     },
     updateGuestsSelected(guest) {
       const index = this.guestsSelected.findIndex(
@@ -221,7 +248,7 @@ export default {
     updateGuestCount(guest) {
       return this.eventDoc
         .collection('guests')
-        .doc('guest.id')
+        .doc(guest.id)
         .update({ count: guest.count + 1 })
         .catch((error) => {
           throw error
@@ -274,6 +301,35 @@ export default {
   }
   & + & {
     margin-top: 5px;
+  }
+}
+.listModal {
+  &__list {
+    margin: 20px 0;
+  }
+  &__item {
+    display: flex;
+    margin: 0 -10px;
+    > div {
+      padding: 0 10px;
+    }
+  }
+  &__time {
+    flex-shrink: 0;
+    text-align: right;
+    width: 70px;
+  }
+  &__part {
+    flex-shrink: 0;
+    width: 100px;
+  }
+  &__name {
+    max-width: 300px;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
   }
 }
 .buttonNewSession {

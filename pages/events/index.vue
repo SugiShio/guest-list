@@ -1,21 +1,21 @@
 <template lang="pug">
 section
   template(v-if='events.length')
-    section-head(title='Events')
+    section-head(:title='$t("events")')
       template(#functions)
         g-button(
-          @click='$router.push({name:"events-new"})'
+          @click='goto("events-new")'
           size='mini'
           inline)
             i.el-icon-plus
-            | &nbsp;New Event
+            | &nbsp;{{ $t('newEvent')}}
     list
       list-item(
         v-for='event in events'
         :key='event.id'
         :actions='actions(event)')
         template(#body)
-          .eventItem(@click='goto(event)')
+          .eventItem(@click='goto("eventId-list", { eventId: event.id })')
             time.eventItem__child(
               :datetime='event.dateMeta')
               |{{ event.dateText }}
@@ -58,27 +58,36 @@ export default {
     actions(event) {
       return [
         {
-          label: 'Detail',
+          label: this.$t('detail'),
           action: () => {
             this.$router.push({
-              name: 'events-eventId',
+              name: `events-eventId___${this.$i18n.locale}`,
               params: { eventId: event.id }
             })
           }
         },
         {
-          label: 'Delete',
+          label: this.$t('delete'),
           color: 'red',
           action: () => {
-            if (!confirm(`Are you sure to delete an event "${event.name}" ?`))
-              return
+            const confirmText = this.$t('events-index.confirmDeleting').replace(
+              '##EVENTNAME##',
+              event.name
+            )
+            if (!confirm(confirmText)) return
             this.eventCollection
               .doc(event.id)
               .delete()
               .then(() => {
                 this.fetchEvents()
+                const deleteSucceededMessage = this.$t(
+                  'events-index.deleteSucceededMessage'
+                ).replace('##EVENTNAME##', event.name)
+
+                alert(deleteSucceededMessage)
               })
               .catch((error) => {
+                this.$store.commit('setError', { error })
                 throw error
               })
           }
@@ -101,13 +110,8 @@ export default {
           throw error
         })
     },
-    goto(item) {
-      this.$router.push({
-        name: 'eventId-list',
-        params: {
-          eventId: item.id
-        }
-      })
+    goto(routeName, params) {
+      this.$router.push({ name: `${routeName}___${this.$i18n.locale}`, params })
     },
     init() {
       this.eventCollection = firestore

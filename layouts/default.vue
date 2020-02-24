@@ -27,9 +27,6 @@ export default {
   created() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        if (this.$route.name === 'signin') {
-          this.$router.push('/')
-        }
         this.$store.dispatch('updateUser', {
           uid: user.uid
         })
@@ -45,7 +42,7 @@ export default {
     signout() {
       auth.signOut().then(() => {
         this.$store.dispatch('signout')
-        this.$router.push({ name: 'signin' })
+        this.$router.push({ name: `signin___${this.$i18n.locale}` })
       })
     }
   }

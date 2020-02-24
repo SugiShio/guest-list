@@ -3,8 +3,6 @@ export class Event {
   constructor(params = {}) {
     this.name = params.name || 'Event'
     this.charge = params.charge || ''
-    this.text = params.text || ''
-    this.thankyouText = params.thankyouText || ''
     this.createdAt = params.createdAt
     this.openAt = getTimestamp({ date: params.date, time: params.openAt })
     this.startAt = getTimestamp({ date: params.date, time: params.startAt })
@@ -12,6 +10,11 @@ export class Event {
     this.hostsInstruments = (params.hostsInstruments || []).filter(
       (_, index) => params.hosts[index]
     )
+    this.instruments = (params.instruments || [])
+      .filter((instrument) => instrument)
+      .filter((item, index, items) => items.indexOf(item) === index)
+    this.text = params.text || ''
+    this.thankyouText = params.thankyouText || ''
     if (params.id) this.id = params.id
     if (params.updatedAt) this.updatedAt = params.updatedAt
   }

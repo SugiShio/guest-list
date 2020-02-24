@@ -1,7 +1,7 @@
 <template lang="pug">
 g-button(
   @click='signinWithGoogle'
-  inline) Sign in with Google
+  inline) {{ $t('signinWithGoogle') }}
 </template>
 
 <script>

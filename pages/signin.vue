@@ -1,33 +1,27 @@
 <template lang="pug">
 .signin
   .signin__buttons
-    g-button(
-      @click='signinWithGoogle'
-      inline) Sign in with Google
+    button-signin
 </template>
 
 <script>
-import gButton from '@/components/button'
+import buttonSignin from '@/components/buttonSignin'
 import firebase, { auth } from '~/plugins/firebase.js'
 const provider = new firebase.auth.GoogleAuthProvider()
 
 export default {
   layout: 'public',
-  components: { gButton },
+  components: { buttonSignin },
   created() {
     if (this.$store.state.isSignin) {
       this.$router.push('/')
     }
     auth.onAuthStateChanged((user) => {
       if (user) {
-        if (this.$route.name === 'signin') {
-          this.$router.push('/')
-        }
         this.$store.dispatch('updateUser', {
           uid: user.uid
         })
-      } else {
-        this.$router.push('/signin')
+        this.$router.push('/')
       }
     })
   },
