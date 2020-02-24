@@ -74,12 +74,6 @@ import { Event } from '@/models/event'
 import { Guest } from '@/models/guest'
 import { firestore } from '~/plugins/firebase.js'
 const guestTypes = Object.values(GUEST_TYPES)
-const THANKYOU_TEXTS = [
-  'Please enjoy yourselves!',
-  'Have fabulous time with us !',
-  'Have fun!',
-  'Have a great time!'
-]
 export default {
   layout: 'public',
   components: {
@@ -127,6 +121,9 @@ export default {
         this.guest.instruments.includes(instrument.value)
       )
     },
+    thankyouTexts() {
+      return this.$t('eventId-enter.thankyouTexts')
+    },
     uid() {
       return this.$store.state.uid
     }
@@ -164,9 +161,11 @@ export default {
         .doc()
         .set({ ...new Guest(guest) })
         .then((responce) => {
-          const randamIndex = Math.floor(Math.random() * THANKYOU_TEXTS.length)
+          const randamIndex = Math.floor(
+            Math.random() * this.thankyouTexts.length
+          )
           this.thankyouText =
-            this.event.thankyouText || THANKYOU_TEXTS[randamIndex]
+            this.event.thankyouText || this.thankyouTexts[randamIndex]
           this.guest = new Guest()
           this.isPosting = false
           this.showModal = true

@@ -34,7 +34,8 @@
   },
   "eventId-enter": {
     "inputInstrument": "パート",
-    "selectInstrument": "メインのパートを選択してください"
+    "selectInstrument": "メインのパートを選択してください",
+    "thankyouTexts": ["一緒に楽しみましょう！", "良い時を！"]
   },
   "errorMessages": {
     "nameIsRequired": "名前は必須です",

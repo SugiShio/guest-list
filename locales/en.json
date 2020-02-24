@@ -34,7 +34,13 @@
   },
   "eventId-enter": {
     "inputInstrument": "Input instrument(s)",
-    "selectInstrument": "Select your main instrument"
+    "selectInstrument": "Select your main instrument",
+    "thankyouTexts": [
+      "Please enjoy yourselves!",
+      "Have fabulous time with us !",
+      "Have fun!",
+      "Have a great time!"
+    ]
   },
   "errorMessages": {
     "nameIsRequired": "Name is required",
